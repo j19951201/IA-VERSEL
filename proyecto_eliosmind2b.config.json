@@ -1,0 +1,20 @@
+{
+  "RefreshSeconds": 5,
+  "KvRestApiUrl": "",
+  "StripeApiBase": "https://api.stripe.com/v1",
+  "KvRestApiToken": "",
+  "StripeSecretKey": "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",
+  "UsersReportUrl": "https://ia-juris-app.vercel.app/api/auth/users-report",
+  "UsersReportToken": "corvinus-hard-token",
+  "ProjectRoot": "C:\\Users\\joanc\\Downloads\\Nueva carpeta (6)",
+  "StartScriptRelativePath": "scripts\\start_ai_stack.ps1",
+  "ProxyBaseUrl": "http://127.0.0.1:11436",
+  "ProxyToken": "corvinus-hard-token",
+  "Model": "corvinus-unico:latest",
+  "AppChatUrl": "http://127.0.0.1:3000/api/chat",
+  "IntervalSeconds": 90,
+  "RequestTimeoutSeconds": 25,
+  "AutoStartStack": true,
+  "AutoStartAppDev": true,
+  "AppDevPort": 3000
+}

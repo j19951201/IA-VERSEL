@@ -1,0 +1,277 @@
+╔════════════════════════════════════════════════════════════════════════╗
+║         PROYECTO ELIOSMIND 2B - CEREBRO GGUF LAUNCHER                 ║
+║                    GUÍA DE INSTALACIÓN v1.0.0                          ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 DESCRIPCIÓN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Proyecto EliosMind 2B es un Launcher profesional de Windows para ejecutar y
+monitorear el cerebro GGUF (modelo de lenguaje) utilizado en IA Juris.
+
+La aplicación:
+✓ Monitorea la conectividad del cerebro GGUF
+✓ Verifica que las APIs estén funcionales
+✓ Valida los tokens de autenticación
+✓ Ejecuta automáticamente el stack de IA
+✓ Genera logs de monitoreo en tiempo real
+✓ Se instala como una aplicación de Windows estándar
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🚀 CÓMO INSTALAR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. UBICACIÓN EN EL ESCRITORIO:
+   Encontrarás dos archivos:
+   
+   • "Instalador EliosMind 2B.lnk"      (Acceso directo - RECOMENDADO)
+   • "proyecto_eliosmind2b_setup.bat"   (Script batch - Alternativa)
+
+2. PARA INSTALAR (PASOS SENCILLOS):
+
+   OPCIÓN A: Usar el acceso directo (RECOMENDADO)
+   ──────────────────────────────────────────────
+   a) Haz doble clic en "Instalador EliosMind 2B.lnk"
+   b) Se abrirá una ventana de Símbolo de sistema
+   c) Escribe "I" (Instalar) y presiona ENTER
+   d) Sigue las instrucciones en pantalla
+
+   OPCIÓN B: Ejecutar el archivo batch directamente
+   ────────────────────────────────────────────────
+   a) Haz clic derecho en "proyecto_eliosmind2b_setup.bat"
+   b) Selecciona "Ejecutar como administrador"
+   c) Escribe "I" (Instalar) y presiona ENTER
+   d) Sigue las instrucciones en pantalla
+
+3. PERMISOS:
+   ⚠ La instalación requiere permisos de ADMINISTRADOR
+   ⚠ Se te pedirá confirmación del Control de cuentas de usuario (UAC)
+
+4. UBICACIÓN DE INSTALACIÓN:
+   La aplicación se instalará en:
+   C:\Program Files\EliosMind2B\
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📁 QUÉ SE INSTALA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+El instalador copia los siguientes componentes:
+
+CARPETA: C:\Program Files\EliosMind2B\
+├── EliosMind2B.exe                    [Aplicación principal]
+├── .env.local                         [Variables de entorno locales]
+├── .env.development.local             [Variables de desarrollo]
+├── proyecto_eliosmind2b.config.json   [Configuración del monitoreo]
+├── scripts/                           [Carpeta de scripts]
+│   ├── start_ai_stack.ps1
+│   ├── start_ai_stack_loop.ps1
+│   └── secure_ollama_proxy.js
+├── config/                            [Carpeta de configuración]
+├── logs/                              [Carpeta de logs]
+└── README.txt                         [Documentación]
+
+MENÚ INICIO:
+└── EliosMind2B/
+    ├── Proyecto EliosMind 2B          [Ejecutar la aplicación]
+    ├── Carpeta de Instalación         [Abrir carpeta de instalación]
+    └── Desinstalar                    [Desinstalar la aplicación]
+
+ESCRITORIO:
+└── Proyecto EliosMind 2B.lnk          [Acceso directo de inicio rápido]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+▶ CÓMO USAR LA APLICACIÓN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DESPUÉS DE INSTALAR:
+
+1. INICIAR DESDE EL ESCRITORIO:
+   • Haz doble clic en "Proyecto EliosMind 2B.lnk"
+
+2. O DESDE EL MENÚ INICIO:
+   • Busca "Proyecto EliosMind 2B"
+   • Haz clic en "Proyecto EliosMind 2B"
+
+3. LA APLICACIÓN HARÁ:
+   • Iniciará automáticamente el stack de IA
+   • Lanzará el servidor de desarrollo (Vercel dev en puerto 3000)
+   • Comenzará a monitorear cada 90 segundos:
+     ✓ Estado del cerebro GGUF
+     ✓ Validez del token de autenticación
+     ✓ Conectividad de la API
+   • Generará un archivo de log con los resultados
+
+4. ARCHIVO DE LOG:
+   Los logs se guardan en: C:\Users\[Tu Usuario]\Desktop\proyecto eliosmind2b.monitor.log
+   
+   Ejemplo de log:
+   [2026-05-07 13:27:21] GLOBAL=OK | Cerebro GGUF /health=OK | API key/token=OK | App conectada=OK
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚙ CONFIGURACIÓN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Para PERSONALIZAR la aplicación, edita estos archivos:
+
+1. C:\Program Files\EliosMind2B\proyecto_eliosmind2b.config.json
+   
+   Parámetros configurables:
+   • ProxyBaseUrl        → URL del proxy GGUF (default: http://127.0.0.1:11436)
+   • ProxyToken          → Token de autenticación (default: corvinus-hard-token)
+   • Model               → Modelo a usar (default: corvinus-unico:latest)
+   • IntervalSeconds     → Intervalo de monitoreo en segundos (default: 90)
+   • AutoStartStack      → Iniciar stack automáticamente (default: true)
+   • AutoStartAppDev     → Iniciar app dev automáticamente (default: true)
+
+2. C:\Program Files\EliosMind2B\.env.local
+   
+   Variables de entorno:
+   • INTERNAL_AI_API_URL → URL de la API del cerebro
+   • INTERNAL_AI_API_KEY → Clave de API
+   • INTERNAL_AI_AUTH_HEADER → Header de autenticación
+   • INTERNAL_AI_AUTH_SCHEME → Esquema de auth (Bearer, etc)
+
+3. C:\Program Files\EliosMind2B\.env.development.local
+   
+   Variables para entorno de desarrollo
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🗑 DESINSTALAR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+OPCIÓN A: Desde el Menú Inicio (RECOMENDADO)
+─────────────────────────────────────────────
+1. Abre el Menú Inicio
+2. Busca "Proyecto EliosMind 2B"
+3. Haz clic en "Desinstalar"
+4. Confirma la desinstalación
+
+OPCIÓN B: Desde Panel de Control
+─────────────────────────────────
+1. Abre Panel de Control
+2. Ve a "Programas" → "Desinstalar un programa"
+3. Busca "Proyecto EliosMind 2B"
+4. Haz clic en "Desinstalar"
+5. Confirma la desinstalación
+
+OPCIÓN C: Usar el archivo batch
+────────────────────────────────
+1. Haz doble clic en "proyecto_eliosmind2b_setup.bat"
+2. Escribe "D" (Desinstalar) y presiona ENTER
+3. Confirma cuando se te pida
+
+La desinstalación eliminará:
+✓ Todos los archivos de la aplicación
+✓ Los accesos directos
+✓ Las entradas del Registro de Windows
+✓ Los archivos de configuración y logs
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚠ REQUISITOS DEL SISTEMA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PARA EJECUTAR ESTA APLICACIÓN NECESITAS:
+
+Sistema Operativo:
+✓ Windows 10 (Build 1909 o superior)
+✓ Windows 11
+
+Dependencias de Software:
+✓ .NET Framework 4.0 o superior (incluido en Windows 10/11)
+✓ PowerShell 5.0 o superior (incluido en Windows 10/11)
+✓ Node.js 14.0 o superior (para Vercel dev)
+
+Servicios de Red:
+✓ Ollama (para el modelo GGUF)
+✓ Puerto 11434 disponible (Ollama)
+✓ Puerto 11436 disponible (Proxy)
+✓ Puerto 3000 disponible (Vercel dev)
+✓ Conexión de Internet (opcional, solo para descargas)
+
+Permisos:
+✓ Acceso de administrador para instalar
+✓ Acceso de usuario estándar para ejecutar
+
+Memoria:
+✓ RAM: 8 GB mínimo (16 GB recomendado para GGUF)
+
+Espacio en Disco:
+✓ 500 MB para la aplicación
+✓ 5-10 GB para modelos GGUF
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🐛 SOLUCIÓN DE PROBLEMAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PROBLEMA: "Acceso denegado" durante la instalación
+───────────────────────────────────────────────────
+SOLUCIÓN:
+• Ejecuta el instalador como administrador
+• Haz clic derecho → "Ejecutar como administrador"
+
+PROBLEMA: El cerebro GGUF no responde
+─────────────────────────────────────
+SOLUCIÓN:
+• Verifica que Ollama esté corriendo
+• Ejecuta: ollama serve
+• Verifica el puerto 11434
+
+PROBLEMA: El monitor muestra "FAIL" en conectividad
+───────────────────────────────────────────────────
+SOLUCIÓN:
+• Verifica el archivo .env.local con las credenciales correctas
+• Valida el token de autenticación en proyecto_eliosmind2b.config.json
+• Comprueba que el proxy esté escuchando en puerto 11436
+
+PROBLEMA: Vercel dev no inicia
+──────────────────────────────
+SOLUCIÓN:
+• Asegúrate de que Node.js está instalado
+• Verifica que el puerto 3000 está disponible
+• En terminal: netstat -ano | findstr :3000
+• Si está en uso: taskkill /PID [PID] /F
+
+PROBLEMA: Puerto ocupado
+───────────────────────
+SOLUCIÓN:
+• Encuentra qué proceso usa el puerto: netstat -ano | findstr :[PUERTO]
+• Termina el proceso: taskkill /PID [PID] /F
+• O reinicia tu computadora
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📞 SOPORTE Y LOGS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ARCHIVO DE LOG:
+Ubicación: C:\Users\[Tu Usuario]\Desktop\proyecto eliosmind2b.monitor.log
+
+PARA VER LOS LOGS:
+1. Abre el Explorador de archivos
+2. Ve al Escritorio
+3. Busca "proyecto eliosmind2b.monitor.log"
+4. Abre con bloc de notas
+
+INFORMACIÓN DEL LOG:
+Cada línea contiene:
+[TIMESTAMP] GLOBAL=[OK/FAIL] | Cerebro GGUF /health=[OK/FAIL] | 
+API key/token=[OK/FAIL] | Aplicacion conectada=[OK/FAIL]
+
+EJEMPLO DE LOG CORRECTO:
+[2026-05-07 13:27:21] GLOBAL=OK | Cerebro GGUF /health=OK | 
+API key/token proxy + generate=OK | Aplicacion conectada al cerebro=OK
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ INSTALACIÓN LISTA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+El instalador está listo en tu Escritorio:
+
+1. "Instalador EliosMind 2B.lnk"     → Acceso directo (RECOMENDADO)
+2. "proyecto_eliosmind2b_setup.bat"  → Script batch (Alternativa)
+
+PARA COMENZAR:
+Haz doble clic en "Instalador EliosMind 2B.lnk"
+
+¡Gracias por usar Proyecto EliosMind 2B!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

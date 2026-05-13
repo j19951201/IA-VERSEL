@@ -1,0 +1,18 @@
+﻿[2026-05-08 22:20:28] [*] Compilando launcher comercial desde: C:\Users\joanc\Downloads\Nueva carpeta (6)\scripts\ia_juris_business_launcher.cs
+[2026-05-08 22:20:28] [*] Agregando ensamblados...
+[2026-05-08 22:20:28] [+] Compilacion exitosa en memoria
+[2026-05-08 22:20:28] [+] Tipo Program encontrado
+[2026-05-08 22:20:28] [+] Tipo BusinessForm encontrado
+[2026-05-08 22:20:28] [+] Tipo BusinessData encontrado
+[2026-05-08 22:20:28] [*] Cargando configuracion...
+[2026-05-08 22:20:28] [*] Ruta de config: C:\Users\joanc\Downloads\Nueva carpeta (6)\scripts\ia_juris_business_launcher.config.json
+[2026-05-08 22:20:28] [*] Config existe: True
+[2026-05-08 22:20:28] [*] Invocando LoadConfig con path: C:\Users\joanc\Downloads\Nueva carpeta (6)\scripts\ia_juris_business_launcher.config.json
+[2026-05-08 22:20:28] [+] Configuracion cargada exitosamente
+[2026-05-08 22:20:28] [*] Tipo de config: BusinessConfig
+[2026-05-08 22:20:28] [*] Configurando Application...
+[2026-05-08 22:20:28] [*] Creando BusinessForm...
+[2026-05-08 22:20:28] [+] BusinessForm creada
+[2026-05-08 22:20:28] [*] Tipo de businessForm: BusinessForm
+[2026-05-08 22:20:28] [*] businessForm es null: False
+[2026-05-08 22:20:28] [*] Ejecutando Application.Run()...

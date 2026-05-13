@@ -1,0 +1,9 @@
+{
+  "RefreshSeconds": 5,
+  "KvRestApiUrl": "",
+  "StripeApiBase": "https://api.stripe.com/v1",
+  "KvRestApiToken": "",
+  "StripeSecretKey": "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",
+  "UsersReportUrl": "https://ia-juris-app.vercel.app/api/auth/users-report",
+  "UsersReportToken": "corvinus-hard-token"
+}

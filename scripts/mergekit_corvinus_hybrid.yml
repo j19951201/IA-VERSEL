@@ -1,0 +1,17 @@
+# Plantilla de merge para crear un modelo unico compatible con tu stack.
+# Importante: usa modelos de la misma familia/arquitectura.
+# Ejemplo: Gemma+Gemma, Llama+Llama, Qwen+Qwen.
+
+models:
+  - model: models/hf/modelo-a-base
+    parameters:
+      weight: 0.5
+  - model: models/hf/modelo-b-coding
+    parameters:
+      weight: 0.3
+  - model: models/hf/modelo-c-legal
+    parameters:
+      weight: 0.2
+
+merge_method: ties
+dtype: bfloat16

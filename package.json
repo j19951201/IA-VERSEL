@@ -1,0 +1,15 @@
+{
+  "name": "ia-juris",
+  "version": "1.0.0",
+  "description": "IA Juris - Asistente legal",
+  "scripts": {
+    "dev": "npx serve public -p 3000 -s",
+    "secure-proxy": "node scripts/secure_ollama_proxy.js"
+  },
+  "devDependencies": {
+    "serve": "^14.2.4"
+  },
+  "dependencies": {
+    "@vercel/blob": "^2.3.3"
+  }
+}

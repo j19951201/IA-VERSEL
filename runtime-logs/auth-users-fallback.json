@@ -1,0 +1,13 @@
+[
+  {
+    "id": "53fffa0b-90b6-4a3b-87d7-9296e75dab84",
+    "fullName": "Usuario Test Persistencia",
+    "email": "persistencia.launcher@iajuris.test",
+    "passwordHash": "pbkdf2$sha256$120000$ff262c5773ff1095fc0bd910948baa05$b8b40195258f0eeb8dc481a229fbb8c8fe12b3cd4ca990707df8158a576160f8",
+    "photoUrl": "",
+    "avatarUrl": "",
+    "emailVerified": true,
+    "createdAt": "2026-05-09T01:46:49.790Z",
+    "updatedAt": "2026-05-09T01:46:49.792Z"
+  }
+]
