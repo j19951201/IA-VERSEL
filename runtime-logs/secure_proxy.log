@@ -60,3 +60,7 @@ Secure Ollama proxy escuchando en http://0.0.0.0:11436
 Rutas expuestas: /api/generate, /health
 Rate limit: 60/60s
 Reglas IP: 0.0.0.0/0
+Secure Ollama proxy escuchando en http://0.0.0.0:11436
+Reglas IP: 0.0.0.0/0
+Rutas expuestas: /api/generate, /health
+Rate limit: 60/60s
