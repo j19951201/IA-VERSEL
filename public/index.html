@@ -1439,7 +1439,7 @@
                   const restoreFullName = resolveRestoreFullName(email, storedUserToken);
                   if (registerForm.email) registerForm.email.value = email;
                   if (registerForm.password) registerForm.password.value = password;
-                  if (registerForm.fullName && !String(registerForm.fullName.value || "").trim()) {
+                 
                     registerForm.fullName.value = restoreFullName;
                   }
                 }
