@@ -126,22 +126,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   async function requestAssistant(text) {
-    // Detectar si estamos en producción o desarrollo
-    const isProduction = window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1";
-
-    // En producción (Vercel), intentar primero /api/chat
-    if (isProduction || usePublicAPI) {
-      try {
-        const response = await callPublicAPI(text);
-        if (response) {
-          return response.substring(0, MAX_RESPONSE_CHARS);
-        }
-      } catch (err) {
-        // Continuar con fallback
-      }
-    }
-
-    // En desarrollo local, intentar Ollama con fallback de modelos
     for (const model of MODEL_FALLBACK_ORDER) {
       try {
         const response = await callOllamaAPI(text, model);
@@ -153,7 +137,6 @@ document.addEventListener("DOMContentLoaded", function () {
         continue;
       }
     }
-
     throw new Error("Lo siento, no puedo procesar tu solicitud en este momento. Intenta más tarde.");
   }
 
