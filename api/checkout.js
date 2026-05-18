@@ -30,6 +30,10 @@ const PLAN_CONFIG = {
 };
 
 function getStripeKey() {
+  // Si está en Vercel, nunca devolver la clave
+  if (process.env.VERCEL === "1" || process.env.VERCEL === "true") {
+    return "";
+  }
   return String(process.env.STRIPE_SECRET_KEY || process.env.STRIPE_API_KEY || "").trim();
 }
 
@@ -178,6 +182,11 @@ module.exports = async function handler(req, res) {
   }
 
   const secretKey = getStripeKey();
+  // Si está en Vercel, bloquear el uso de Stripe
+  if (process.env.VERCEL === "1" || process.env.VERCEL === "true") {
+    json(res, 403, { error: "Stripe solo disponible fuera de Vercel" });
+    return;
+  }
   if (!secretKey) {
     json(res, 503, { error: "STRIPE_SECRET_KEY no configurada" });
     return;

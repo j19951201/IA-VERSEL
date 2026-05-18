@@ -12,10 +12,13 @@ using System.Web.Script.Serialization;
 internal sealed class MonitorConfig
 {
     public string ProjectRoot = @"C:\Users\joanc\Downloads\Nueva carpeta (6)";
-    public string StartScriptRelativePath = @"scripts\start_ai_stack.ps1";
-    public string ProxyBaseUrl = "http://127.0.0.1:11436";
-    public string ProxyToken = "corvinus-hard-token";
-    public string Model = "corvinus-unico:latest";
+    public string StartScriptRelativePath = @"scripts\start_phi2_stack.ps1";
+    public string ProxyBaseUrl = "http://127.0.0.1:8000";
+    public string UpstreamPath = "/v1/chat/completions";
+    public string Provider = "openai";
+    public string ProxyToken = "";
+    public string Model = "phi-2-local";
+    public string ModelPath = @"D:\phi-2-GGUF\phi-2.Q4_K_M.gguf";
     public string AppChatUrl = "http://127.0.0.1:3000/api/chat";
     public int IntervalSeconds = 90;
     public int RequestTimeoutSeconds = 25;
@@ -81,6 +84,20 @@ internal static class Program
             WriteLine(appLaunchOk ? "[OK] App local verificada/iniciada." : "[WARN] No se pudo verificar o iniciar la app local.", appLaunchOk ? ConsoleColor.Green : ConsoleColor.Yellow);
         }
 
+        // Abrir la interfaz de chat en el navegador predeterminado
+        try
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "http://127.0.0.1:3000",
+                UseShellExecute = true
+            });
+        }
+        catch (Exception ex)
+        {
+            WriteLine("[WARN] No se pudo abrir la interfaz web: " + ex.Message, ConsoleColor.Yellow);
+        }
+
         while (true)
         {
             var timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
@@ -135,8 +152,11 @@ internal static class Program
             ApplyString(map, "ProjectRoot", value => config.ProjectRoot = value);
             ApplyString(map, "StartScriptRelativePath", value => config.StartScriptRelativePath = value);
             ApplyString(map, "ProxyBaseUrl", value => config.ProxyBaseUrl = value.TrimEnd('/'));
+            ApplyString(map, "UpstreamPath", value => config.UpstreamPath = value);
+            ApplyString(map, "Provider", value => config.Provider = value);
             ApplyString(map, "ProxyToken", value => config.ProxyToken = value);
             ApplyString(map, "Model", value => config.Model = value);
+            ApplyString(map, "ModelPath", value => config.ModelPath = value);
             ApplyString(map, "AppChatUrl", value => config.AppChatUrl = value);
             ApplyInt(map, "IntervalSeconds", value => config.IntervalSeconds = value);
             ApplyInt(map, "RequestTimeoutSeconds", value => config.RequestTimeoutSeconds = value);
@@ -245,7 +265,9 @@ internal static class Program
             var psi = new ProcessStartInfo();
             psi.FileName = "powershell.exe";
             psi.WorkingDirectory = config.ProjectRoot;
-            psi.Arguments = "-NoProfile -ExecutionPolicy Bypass -Command \"$env:INTERNAL_AI_API_URL='" + config.ProxyBaseUrl.TrimEnd('/') + "/api/generate'; $env:INTERNAL_AI_AUTH_HEADER='Authorization'; $env:INTERNAL_AI_AUTH_SCHEME='Bearer'; $env:INTERNAL_AI_API_KEY='" + EscapePs(config.ProxyToken) + "'; $env:INTERNAL_AI_TIMEOUT_MS='60000'; $env:INTERNAL_AI_DEFAULT_MODEL='" + EscapePs(config.Model) + "'; npx --yes vercel dev --listen " + config.AppDevPort + "\"";
+            var upstreamUrl = config.ProxyBaseUrl.TrimEnd('/') + NormalizeUpstreamPath(config.UpstreamPath);
+            var authScheme = string.IsNullOrWhiteSpace(config.ProxyToken) ? string.Empty : "Bearer";
+            psi.Arguments = "-NoProfile -ExecutionPolicy Bypass -Command \"$env:INTERNAL_AI_PROVIDER='" + EscapePs(config.Provider) + "'; $env:INTERNAL_AI_API_URL='" + upstreamUrl + "'; $env:INTERNAL_AI_AUTH_HEADER='Authorization'; $env:INTERNAL_AI_AUTH_SCHEME='" + authScheme + "'; $env:INTERNAL_AI_API_KEY='" + EscapePs(config.ProxyToken) + "'; $env:INTERNAL_AI_TIMEOUT_MS='60000'; $env:INTERNAL_AI_DEFAULT_MODEL='" + EscapePs(config.Model) + "'; npx --yes vercel dev --listen " + config.AppDevPort + "\"";
             psi.CreateNoWindow = true;
             psi.UseShellExecute = false;
 
@@ -368,26 +390,14 @@ internal static class Program
                 healthOk,
                 healthOk ? "Proxy y upstream responden" : health.Detail));
 
-            if (string.IsNullOrWhiteSpace(config.ProxyToken))
-            {
-                results.Add(new CheckResult("API key/token proxy", false, "Token vacio en configuracion"));
-            }
-            else
-            {
-                var generatePayload = Json.Serialize(new Dictionary<string, object>
-                {
-                    { "model", config.Model },
-                    { "prompt", "Responde SOLO MONITOR_OK" },
-                    { "stream", false }
-                });
-                var generateUrl = config.ProxyBaseUrl.TrimEnd('/') + "/api/generate";
-                var generate = await SafePost(client, generateUrl, generatePayload, config.ProxyToken);
-                var authOk = generate.Ok && generate.Body.IndexOf("MONITOR_OK", StringComparison.OrdinalIgnoreCase) >= 0;
-                results.Add(new CheckResult(
-                    "API key/token proxy + generate",
-                    authOk,
-                    authOk ? "Token funcional y modelo responde" : generate.Detail));
-            }
+            var checkPayload = BuildUpstreamCheckPayload(config);
+            var checkUrl = config.ProxyBaseUrl.TrimEnd('/') + NormalizeUpstreamPath(config.UpstreamPath);
+            var check = await SafePost(client, checkUrl, checkPayload, string.IsNullOrWhiteSpace(config.ProxyToken) ? null : config.ProxyToken);
+            var checkOk = check.Ok && check.Body.IndexOf("MONITOR_OK", StringComparison.OrdinalIgnoreCase) >= 0;
+            results.Add(new CheckResult(
+                "Backend modelo",
+                checkOk,
+                checkOk ? "Modelo responde en backend local" : check.Detail));
 
             if (string.IsNullOrWhiteSpace(config.AppChatUrl))
             {
@@ -481,6 +491,47 @@ internal static class Program
         return normalized.Substring(0, maxLength) + "...";
     }
 
+    private static string NormalizeUpstreamPath(string path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            return "/api/generate";
+        }
+
+        return path.StartsWith("/") ? path : "/" + path;
+    }
+
+    private static string BuildUpstreamCheckPayload(MonitorConfig config)
+    {
+        if (string.Equals(config.Provider, "openai", StringComparison.OrdinalIgnoreCase) || string.Equals(config.Provider, "groq", StringComparison.OrdinalIgnoreCase))
+        {
+            return Json.Serialize(new Dictionary<string, object>
+            {
+                { "model", config.Model },
+                {
+                    "messages",
+                    new object[]
+                    {
+                        new Dictionary<string, object>
+                        {
+                            { "role", "user" },
+                            { "content", "Responde SOLO MONITOR_OK" }
+                        }
+                    }
+                },
+                { "max_tokens", 12 },
+                { "stream", false }
+            });
+        }
+
+        return Json.Serialize(new Dictionary<string, object>
+        {
+            { "model", config.Model },
+            { "prompt", "Responde SOLO MONITOR_OK" },
+            { "stream", false }
+        });
+    }
+
     private static void AppendLog(string logPath, string timestamp, List<CheckResult> checks, bool allOk)
     {
         try
@@ -507,6 +558,9 @@ internal static class Program
         WriteLine("Proyecto: " + config.ProjectRoot, ConsoleColor.Gray);
         WriteLine("Script arranque: " + startScript, ConsoleColor.Gray);
         WriteLine("Proxy: " + config.ProxyBaseUrl, ConsoleColor.Gray);
+        WriteLine("Provider: " + config.Provider, ConsoleColor.Gray);
+        WriteLine("Upstream: " + NormalizeUpstreamPath(config.UpstreamPath), ConsoleColor.Gray);
+        WriteLine("Modelo GGUF: " + config.ModelPath, ConsoleColor.Gray);
         WriteLine("App chat: " + config.AppChatUrl, ConsoleColor.Gray);
         WriteLine("Config editable: " + configPath, ConsoleColor.Gray);
     }

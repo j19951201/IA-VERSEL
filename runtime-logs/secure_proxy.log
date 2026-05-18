@@ -64,3 +64,73 @@ Secure Ollama proxy escuchando en http://0.0.0.0:11436
 Reglas IP: 0.0.0.0/0
 Rutas expuestas: /api/generate, /health
 Rate limit: 60/60s
+Secure Ollama proxy escuchando en http://0.0.0.0:11436
+Rate limit: 60/60s
+Reglas IP: 0.0.0.0/0
+Rutas expuestas: /api/generate, /health
+Secure Ollama proxy escuchando en http://0.0.0.0:11436
+Rutas expuestas: /api/generate, /health
+Reglas IP: 0.0.0.0/0
+Rate limit: 60/60s
+Secure Ollama proxy escuchando en http://0.0.0.0:11436
+Rate limit: 60/60s
+Reglas IP: 0.0.0.0/0
+Rutas expuestas: /api/generate, /health
+Secure Ollama proxy escuchando en http://0.0.0.0:11436
+Rutas expuestas: /api/generate, /health
+Rate limit: 60/60s
+Reglas IP: 0.0.0.0/0
+node:events:486
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at node:net:2206:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 11436
+}
+Node.js v25.2.1
+Error: listen EADDRINUSE: address already in use 0.0.0.0:11436
+      throw er; // Unhandled 'error' event
+      ^
+Secure Ollama proxy escuchando en http://0.0.0.0:11436
+Rutas expuestas: /api/generate, /health
+Reglas IP: 0.0.0.0/0
+Rate limit: 60/60s
+Secure Ollama proxy escuchando en http://0.0.0.0:11436
+Rutas expuestas: /api/generate, /health
+Rate limit: 60/60s
+Reglas IP: 0.0.0.0/0
+Secure Ollama proxy escuchando en http://0.0.0.0:11436
+Rate limit: 60/60s
+Rutas expuestas: /api/generate, /health
+Reglas IP: 0.0.0.0/0
+Secure Ollama proxy escuchando en http://0.0.0.0:11436
+Rutas expuestas: /api/generate, /health
+Rate limit: 60/60s
+Reglas IP: 0.0.0.0/0
+Rate limit: 60/60s
+Reglas IP: 0.0.0.0/0
+Secure Ollama proxy escuchando en http://0.0.0.0:11436
+Rutas expuestas: /api/generate, /health
+Secure Ollama proxy escuchando en http://0.0.0.0:11436
+Rutas expuestas: /api/generate, /health
+Rate limit: 60/60s
+Reglas IP: 0.0.0.0/0
+Secure Ollama proxy escuchando en http://0.0.0.0:11436
+Rate limit: 60/60s
+Rutas expuestas: /api/generate, /health
+Reglas IP: 0.0.0.0/0
+Secure Ollama proxy escuchando en http://0.0.0.0:11436
+Reglas IP: 0.0.0.0/0
+Rate limit: 60/60s
+Rutas expuestas: /api/generate, /health
+Rutas expuestas: /api/generate, /health
+Rate limit: 60/60s
+Secure Ollama proxy escuchando en http://0.0.0.0:11436
+Reglas IP: 0.0.0.0/0

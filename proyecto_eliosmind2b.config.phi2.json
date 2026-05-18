@@ -1,0 +1,13 @@
+{
+  "ProjectRoot": "C:\\Users\\joanc\\Downloads\\Nueva carpeta (6)",
+  "StartScriptRelativePath": "scripts\\start_ai_stack.ps1",
+  "ProxyBaseUrl": "http://127.0.0.1:8000", // llama.cpp server
+  "ProxyToken": "", // No requiere token para llama.cpp por defecto
+  "Model": "d:/phi-2-GGUF/phi-2.Q4_K_M.gguf",
+  "AppChatUrl": "http://127.0.0.1:3000/api/chat",
+  "IntervalSeconds": 90,
+  "RequestTimeoutSeconds": 25,
+  "AutoStartStack": false,
+  "AutoStartAppDev": true,
+  "AppDevPort": 3000
+}

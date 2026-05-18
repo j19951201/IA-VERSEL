@@ -9,6 +9,10 @@ const PLAN_LABELS = {
 };
 
 function getWebhookSecret() {
+  // Si está en Vercel, nunca devolver la clave
+  if (process.env.VERCEL === "1" || process.env.VERCEL === "true") {
+    return "";
+  }
   return String(process.env.STRIPE_WEBHOOK_SECRET || "").trim();
 }
 
@@ -152,6 +156,11 @@ module.exports = async function handler(req, res) {
     return;
   }
 
+  // Si está en Vercel, bloquear el uso del webhook de Stripe
+  if (process.env.VERCEL === "1" || process.env.VERCEL === "true") {
+    json(res, 403, { error: "Stripe Webhook solo disponible fuera de Vercel" });
+    return;
+  }
   const secret = getWebhookSecret();
   if (!secret) {
     json(res, 503, { error: "STRIPE_WEBHOOK_SECRET no configurada" });
