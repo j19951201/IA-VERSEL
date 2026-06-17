@@ -7,47 +7,664 @@
   <title>IA Juris Dashboard</title>
   <meta name="description" content="IA Juris para gestion de casos y asistente legal inteligente." />
   <meta name="robots" content="index,follow" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=20260614" />
+  <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-juris-2026-05-08.png?v=20260614b" />
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=20260614" />
+  <link rel="apple-touch-icon" href="/assets/favicon-juris-2026-05-08.png?v=20260614b" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=20260614-landing-saas-mobile-v2" />
 </head>
 <body>
   <main class="app-shell">
-    <section class="hero-card">
+    <section class="public-landing" aria-labelledby="publicLandingTitle">
+      <div class="public-landing-inner">
+        <p class="public-kicker"><img class="public-kicker-logo" src="assets/favicon-juris-2026-05-08.png" alt="Logo IA Juris" />IA Juris | Conocimiento legal digital y general</p>
+        <div class="public-hero-grid">
+          <div class="public-hero-copy">
+            <span class="public-hero-badge">Asistente legal con enfoque ejecutivo</span>
+            <h1 id="publicLandingTitle">Convierte dudas legales en decisiones accionables</h1>
+            <p class="public-subtitle">Una experiencia premium para consultas, redaccion y analisis legal con respuestas estructuradas, enfoque practico y trazabilidad de fuentes.</p>
+
+            <div class="public-highlights" aria-label="Beneficios clave">
+              <span class="public-highlight-chip">Respuestas estructuradas por pasos</span>
+              <span class="public-highlight-chip">Contexto legal para RD y LATAM</span>
+              <span class="public-highlight-chip">Interfaz simple para uso diario</span>
+              <span class="public-highlight-chip">Soporte para documentos y consultas</span>
+            </div>
+
+            <div class="public-actions">
+              <button id="openTrialBtn" class="public-trial-btn" type="button">Iniciar prueba</button>
+              <a class="public-link-btn" href="#heroSection">Ver plataforma</a>
+              <button id="openDownloadAppBtn" class="public-download-btn" type="button">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>
+                Descargar App
+              </button>
+            </div>
+            <p class="public-cta-note">Prueba el producto, explora la interfaz y valida en minutos si encaja en tu flujo legal diario.</p>
+
+            <div class="public-proof-grid" aria-label="Indicadores del producto">
+              <article class="public-proof-card">
+                <strong class="public-proof-value">Acceso inmediato</strong>
+                <span class="public-proof-label">Modo invitado para evaluar la experiencia sin friccion.</span>
+              </article>
+              <article class="public-proof-card">
+                <strong class="public-proof-value">Trabajo guiado</strong>
+                <span class="public-proof-label">Consultas, contratos y borradores en un solo flujo.</span>
+              </article>
+              <article class="public-proof-card">
+                <strong class="public-proof-value">Enfoque practico</strong>
+                <span class="public-proof-label">Respuestas claras, accionables y listas para revisar.</span>
+              </article>
+            </div>
+
+            <div id="trialLoader" class="trial-loader" aria-hidden="true" role="status" aria-live="polite">
+              <div class="trial-loader-head">
+                <span class="trial-loader-dot"></span>
+                <strong>Preparando modo de prueba</strong>
+              </div>
+              <p class="trial-loader-text">Cargando entorno seguro de bienvenida...</p>
+              <div class="trial-loader-track">
+                <span class="trial-loader-fill"></span>
+              </div>
+            </div>
+          </div>
+
+          <aside class="public-hero-panel" aria-label="Resumen del servicio">
+            <p class="public-panel-kicker">Resumen operativo</p>
+            <div class="public-trust-bar" aria-label="Barra de confianza">
+              <div class="public-trust-pill">
+                <span class="public-trust-label">Planes</span>
+                <strong class="public-trust-value">Invitado y Pro</strong>
+              </div>
+              <div class="public-trust-pill">
+                <span class="public-trust-label">Tiempo de respuesta</span>
+                <strong class="public-trust-value">~10-40 segundos</strong>
+              </div>
+              <div class="public-trust-pill">
+                <span class="public-trust-label">Cobertura</span>
+                <strong class="public-trust-value">Consultas, contratos y normas</strong>
+              </div>
+            </div>
+            <div class="public-panel-summary">
+              <strong>Diseñado para consultas diarias, borradores y validacion normativa.</strong>
+              <p>Una interfaz mas clara para profesionales, estudiantes y usuarios que necesitan criterio legal con rapidez.</p>
+            </div>
+          </aside>
+        </div>
+
+        <div class="public-feature-grid" aria-label="Secciones publicables">
+          <article class="public-feature-card">
+            <h2>Consulta inteligente</h2>
+            <p>Respuestas legales claras con contexto, pasos sugeridos y redaccion lista para usar en tu caso.</p>
+          </article>
+          <article class="public-feature-card">
+            <h2>Documentos y borradores</h2>
+            <p>Genera versiones iniciales de demandas, contratos y escritos con formato profesional y enfoque juridico.</p>
+          </article>
+          <article class="public-feature-card">
+            <h2>Soporte normativo visible</h2>
+            <p>Consulta normativa con referencias trazables para validar criterios y fortalecer cada argumento.</p>
+          </article>
+        </div>
+
+        <section class="public-flow" aria-label="Como funciona IA Juris">
+          <h2 class="public-flow-title">Como funciona en 3 pasos</h2>
+          <div class="public-flow-grid">
+            <article class="public-flow-step">
+              <span class="public-flow-index">01</span>
+              <h3>Describe tu caso</h3>
+              <p>Escribe tu situacion legal o la pieza que deseas redactar.</p>
+            </article>
+            <article class="public-flow-step">
+              <span class="public-flow-index">02</span>
+              <h3>Recibe una guia</h3>
+              <p>Obtienes una respuesta accionable con estructura clara y foco practico.</p>
+            </article>
+            <article class="public-flow-step">
+              <span class="public-flow-index">03</span>
+              <h3>Valida y avanza</h3>
+              <p>Usa las referencias para revisar con criterio profesional y tomar decision.</p>
+            </article>
+          </div>
+        </section>
+
+        <p class="public-legal-note">IA Juris orienta y agiliza tu trabajo legal, pero no sustituye la revision de un profesional del derecho.</p>
+        <p class="public-landing-copyright">Copyright © B-Technologis.</p>
+      </div>
+    </section>
+
+    <section id="heroSection" class="hero-card trial-locked" aria-hidden="true">
       <div class="hero-copy">
-        <span class="hero-badge">IA Juris</span>
+        <div class="hero-brand-row">
+          <img class="hero-brand-logo" src="assets/favicon-juris-2026-05-08.png" alt="Logo IA Juris" />
+          <span class="hero-badge">IA Juris</span>
+          <span class="hero-dev-credit">B-Technologis.</span>
+        </div>
+        <p><strong>Hello World</strong></p>
         <h1>Asistente legal inteligente</h1>
         <p>Consulta, redacta y organiza respuestas legales desde una interfaz simple y estable.</p>
       </div>
-      <button id="openAssistantChatBtn" class="hero-open-btn" type="button">Abrir chat</button>
+      <div class="hero-btn-row">
+        <button id="openLoginBtn" class="hero-open-btn" type="button">Iniciar sesión</button>
+        <button id="openRegisterBtn" class="hero-open-btn" type="button">Registrarse</button>
+        <button id="openAssistantChatBtn" class="hero-open-btn" type="button">Abrir chat como invitado</button>
+      </div>
     </section>
   </main>
 
-  <button id="openAssistantChatBtnFloating" class="chat-fab" type="button" aria-label="Abrir chat">💬</button>
-
   <div id="chatModal" class="chat-modal" aria-hidden="true">
     <div class="chat-modal-content" role="dialog" aria-modal="true" aria-labelledby="chatTitle">
-      <div class="chat-modal-header">
-        <div>
-          <p class="chat-kicker">IA Juris</p>
-          <h2 id="chatTitle">Chat legal</h2>
+      <div class="chat-modal-layout">
+        <aside class="chat-sidebar" aria-label="Panel lateral">
+          <div class="chat-sidebar-scroll-area" aria-label="Contenido lateral desplazable">
+          <div class="chat-sidebar-head">
+            <button id="returnLandingBtn" class="chat-sidebar-logo-btn chat-hidden-home-btn" type="button" aria-label="Regresar al landing page" title="Regresar al landing page">
+              <img src="assets/logo-ia-juris.png?v=20260614c" alt="IA Juris" class="chat-sidebar-logo" />
+            </button>
+            <p class="chat-sidebar-title">IA Juris</p>
+            <p class="chat-sidebar-sub">Panel de asistencia</p>
+          </div>
+          <div class="chat-sidebar-section">
+            <p class="chat-sidebar-kicker">Estado</p>
+            <p class="chat-sidebar-text">Asistente legal activo</p>
+          </div>
+          <div class="chat-sidebar-section chat-sidebar-conversations">
+            <div class="chat-sidebar-tabs-head">
+              <p class="chat-sidebar-kicker">Conversaciones</p>
+              <button id="newConversationBtn" class="chat-tab-new-btn" type="button" aria-label="Nueva conversación">+</button>
+            </div>
+            <div id="conversationTabs" class="chat-sidebar-tabs" aria-label="Pestañas de conversaciones"></div>
+          </div>
+          <div class="chat-sidebar-section">
+            <p class="chat-sidebar-kicker">Tipo de Consulta</p>
+            <div class="chat-sidebar-consultation-types">
+              <button class="consultation-type-btn active" data-type="general" title="Consulta general">
+                <span class="btn-icon">💬</span>
+                <span class="btn-label">General</span>
+              </button>
+              <button class="consultation-type-btn" data-type="demanda" title="Redactar demanda legal">
+                <span class="btn-icon">⚖️</span>
+                <span class="btn-label">Demanda</span>
+              </button>
+              <button class="consultation-type-btn" data-type="contrato" title="Analizar/Redactar contrato">
+                <span class="btn-icon">📑</span>
+                <span class="btn-label">Contrato</span>
+              </button>
+              <button class="consultation-type-btn" data-type="norma" title="Consultar normas dominicanas">
+                <span class="btn-icon">📖</span>
+                <span class="btn-label">Normas</span>
+              </button>
+            </div>
+          </div>
+          <div class="chat-sidebar-section">
+            <p class="chat-sidebar-kicker">Sugerencias</p>
+            <ul class="chat-sidebar-list" id="suggestionsListGeneral">
+              <li class="suggestion-item" data-type="general">¿Cuál es mi derecho?</li>
+              <li class="suggestion-item" data-type="general">Asesoría legal general</li>
+              <li class="suggestion-item" data-type="general">Consultar sobre un tema</li>
+            </ul>
+            <ul class="chat-sidebar-list" id="suggestionsListDemanda" style="display: none;">
+              <li class="suggestion-item" data-type="demanda">Demanda por incumplimiento</li>
+              <li class="suggestion-item" data-type="demanda">Demanda laboral</li>
+              <li class="suggestion-item" data-type="demanda">Demanda de divorcio</li>
+            </ul>
+            <ul class="chat-sidebar-list" id="suggestionsListContrato" style="display: none;">
+              <li class="suggestion-item" data-type="contrato">Revisar contrato de trabajo</li>
+              <li class="suggestion-item" data-type="contrato">Contrato de compraventa</li>
+              <li class="suggestion-item" data-type="contrato">Contrato de arrendamiento</li>
+            </ul>
+            <ul class="chat-sidebar-list" id="suggestionsListNorma" style="display: none;">
+              <li class="suggestion-item" data-type="norma">Código Laboral dominicano</li>
+              <li class="suggestion-item" data-type="norma">Ley de Familia</li>
+              <li class="suggestion-item" data-type="norma">Código Penal</li>
+            </ul>
+          </div>
+          </div>
+          <div class="chat-sidebar-footer" aria-label="Perfil de usuario">
+            <div class="chat-sidebar-user-avatar">
+              <img id="sidebarUserPhoto" src="assets/no-foto.png" alt="Perfil de usuario" />
+            </div>
+            <div class="chat-sidebar-user-meta">
+              <p id="sidebarUserName" class="chat-sidebar-user-name">Usuario invitado</p>
+              <p id="sidebarUserPlan" class="chat-sidebar-user-plan">Plan Invitado</p>
+            </div>
+            <button id="openPlansBtn" class="chat-sidebar-plan-btn" type="button" aria-label="Abrir menú" title="Menú" aria-expanded="false" aria-controls="sidebarActionsMenu">★</button>
+            <div id="sidebarActionsMenu" class="chat-sidebar-actions-menu" role="menu" aria-label="Acciones de cuenta">
+              <button id="sidebarProfileMenuItem" class="chat-sidebar-actions-item" type="button" role="menuitem" style="display:none;">Mi perfil</button>
+              <button id="sidebarSearchesMenuItem" class="chat-sidebar-actions-item" type="button" role="menuitem">Mis búsquedas</button>
+              <button id="sidebarPlansMenuItem" class="chat-sidebar-actions-item" type="button" role="menuitem">Planes de pago</button>
+              <button id="sidebarGuestExitMenuItem" class="chat-sidebar-actions-item" type="button" role="menuitem" style="display:none;">Cerrar sesión</button>
+              <button id="sidebarLogoutMenuItem" class="chat-sidebar-actions-item chat-sidebar-actions-item-danger" type="button" role="menuitem">Cerrar sesión</button>
+            </div>
+          </div>
+        </aside>
+        <div id="mobileSidebarBackdrop" class="mobile-sidebar-backdrop" aria-hidden="true"></div>
+
+        <div class="chat-main">
+          <div class="chat-modal-header">
+            <div>
+              <p class="chat-kicker">
+                <button id="toggleSidebarBtn" class="chat-kicker-toggle-btn" type="button" aria-label="Mostrar u ocultar panel lateral" aria-expanded="true">IA Juris</button>
+                <span id="sessionDot" class="session-dot" title="Estado de sesión"></span>
+              </p>
+              <h2 id="chatTitle">Chat legal</h2>
+              <p class="chat-subtitle">Tu asistente de inteligencia artificial</p>
+              <p class="chat-runtime-model" id="runtimeModelBadge">Modelo activo: <span id="runtimeModelLabel">detectando...</span></p>
+            </div>
+            <div class="chat-header-right">
+              <button id="headerLoginBtn" class="chat-header-auth-btn" type="button">Iniciar sesión</button>
+              <button id="headerRegisterBtn" class="chat-header-auth-btn chat-header-auth-btn-primary" type="button">Registrarse</button>
+              <button id="headerTemporaryChatBtn" class="chat-header-temp-btn" type="button" title="Entrar como invitado" aria-label="Entrar como invitado">
+                <span class="temp-clock-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" role="img" focusable="false">
+                    <circle cx="12" cy="12" r="8.5"></circle>
+                    <path d="M12 7.5v4.8l3 2"></path>
+                    <circle cx="12" cy="12" r="0.9"></circle>
+                  </svg>
+                </span>
+              </button>
+              <button id="headerLogoutBtn" class="chat-header-logout-btn" type="button" aria-label="Cerrar sesión">Cerrar sesión</button>
+              <button id="closeModal" class="chat-close-btn" type="button" aria-label="Cerrar">✕</button>
+            </div>
+          </div>
+
+          <div id="chatMessages" class="chat-messages">
+            <div class="message-row bot">
+              <div class="message-avatar" aria-hidden="true">
+                <img src="assets/logo-ia-juris.png?v=20260614c" alt="" />
+              </div>
+              <div class="message-bubble bot">
+                <p>Bienvenido a IA Juris. ¿En qué puedo ayudarte hoy?</p>
+              </div>
+            </div>
+       
+          </div>
+
+          <div class="chat-input-stack">
+            <div class="chat-input-row">
+              <input id="chatInput" type="text" placeholder="Escribe tu mensaje..." autocomplete="off" />
+              <button id="voiceBtn" type="button" title="Hablar con Maria"><img src="assets/voice-assistant.png" alt="Voz" class="voice-btn-icon"></button>
+              <button id="sendBtn" class="chat-send-btn" type="button" aria-label="Enviar">&#10148;</button>
+            </div>
+            <p class="chat-disclaimer">IA Juris no reemplaza profesiones legales. En caso de duda, verifique.</p>
+          </div>
+
+          <nav class="chat-mobile-tabs" aria-label="Navegación móvil">
+            <button class="chat-mobile-tab-btn is-active" type="button" data-mobile-consultation="general" aria-label="Chat">
+              <span class="chat-mobile-tab-icon">💬</span>
+              <span class="chat-mobile-tab-label">Chat</span>
+            </button>
+            <button class="chat-mobile-tab-btn" type="button" data-mobile-consultation="demanda" aria-label="Consultas">
+              <span class="chat-mobile-tab-icon">📁</span>
+              <span class="chat-mobile-tab-label">Consultas</span>
+            </button>
+            <button class="chat-mobile-tab-btn" type="button" data-mobile-consultation="contrato" aria-label="Contratos">
+              <span class="chat-mobile-tab-icon">📄</span>
+              <span class="chat-mobile-tab-label">Contratos</span>
+            </button>
+            <button class="chat-mobile-tab-btn" type="button" data-mobile-consultation="norma" aria-label="Normas">
+              <span class="chat-mobile-tab-icon">⚖</span>
+              <span class="chat-mobile-tab-label">Normas</span>
+            </button>
+            <button id="mobileTabAccountBtn" class="chat-mobile-tab-btn" type="button" aria-label="Cuenta">
+              <span class="chat-mobile-tab-icon">👤</span>
+              <span class="chat-mobile-tab-label">Cuenta</span>
+            </button>
+          </nav>
         </div>
-        <button id="closeModal" class="chat-close-btn" type="button" aria-label="Cerrar">✕</button>
-      </div>
-      <div id="chatMessages" class="chat-messages">
-        <div class="message-bubble bot">
-          <p>Hola. Soy Maria, tu asistente legal. Escribe tu consulta para comenzar.</p>
-        </div>
-      </div>
-      <div class="chat-input-row">
-        <input id="chatInput" type="text" placeholder="Escribe tu mensaje..." autocomplete="off" />
-        <button id="voiceBtn" type="button" title="Hablar con Maria">🎤 Maria</button>
-        <button id="sendBtn" class="chat-send-btn" type="button">Enviar</button>
       </div>
     </div>
   </div>
 
-  <script src="main.js"></script>
+  <!-- Modal de voz -->
+  <div id="voiceModal" class="voice-modal" aria-hidden="true">
+    <div class="voice-modal-box">
+      <button id="closeVoiceModal" class="voice-modal-close" type="button" aria-label="Cerrar">✕</button>
+      <div class="voice-modal-mic-wrap">
+        <img src="assets/favicon-juris-2026-05-08.png" alt="IA Juris" class="voice-modal-mic-img">
+        <span id="voiceActiveDot" class="voice-active-dot"></span>
+      </div>
+      <p class="voice-modal-label">Maria — Asistente de voz</p>
+      <div id="voiceTranscript" class="voice-transcript">Pulsa <strong>Iniciar</strong> para comenzar a grabar. Pulsa de nuevo para <strong>detener y enviar</strong>.</div>
+      <div class="voice-modal-btns">
+        <button id="startVoiceBtn" type="button" class="voice-action-btn voice-start" aria-label="Iniciar grabacion">▶ Iniciar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="authModal" class="auth-modal" aria-hidden="true">
+    <div class="auth-modal-box" role="dialog" aria-modal="true" aria-labelledby="authModalTitle">
+      <button id="closeAuthModal" class="auth-modal-close" type="button" aria-label="Cerrar">✕</button>
+      <section id="authWelcomePanel" class="auth-welcome-panel" aria-label="Bienvenida">
+        <img class="auth-welcome-logo" src="assets/favicon-juris-2026-05-08.png" alt="IA Juris" />
+        <div class="auth-welcome-badge">IA JURIS</div>
+        <p class="auth-welcome-dev">Desarrollado por B-labs</p>
+        <h3 class="auth-welcome-title">Asistente legal inteligente</h3>
+        <p class="auth-welcome-sub">Consulta, redacta y organiza respuestas legales desde una interfaz simple y estable.</p>
+        <button id="authWelcomeLoginBtn" class="auth-welcome-btn auth-welcome-btn-primary" type="button">
+          <span class="auth-welcome-btn-icon">◌</span>
+          <span>Iniciar sesión</span>
+        </button>
+        <button id="authWelcomeRegisterBtn" class="auth-welcome-btn auth-welcome-btn-primary" type="button">
+          <span class="auth-welcome-btn-icon">◎</span>
+          <span>Registrarse</span>
+        </button>
+        <button id="authWelcomeGuestBtn" class="auth-welcome-btn auth-welcome-btn-ghost" type="button">
+          <span class="auth-welcome-btn-icon">◍</span>
+          <span>Abrir chat como invitado</span>
+        </button>
+        <p class="auth-welcome-privacy">Tu información está protegida. Consulta nuestra <a href="#" aria-label="Política de privacidad">Política de privacidad</a>.</p>
+      </section>
+      <div class="auth-modal-header">
+        <div class="auth-modal-badge">IA Juris</div>
+        <h3 id="authModalTitle" class="auth-modal-title">Iniciar sesión</h3>
+        <p id="authModalSubtitle" class="auth-modal-sub">Accede a tu cuenta para continuar en la plataforma.</p>
+      </div>
+
+      <form id="authForm" class="auth-form">
+        <div id="authNameGroup" class="auth-field auth-hidden">
+          <label for="authName">Nombre completo</label>
+          <input id="authName" type="text" autocomplete="name" placeholder="Tu nombre" />
+        </div>
+
+        <div class="auth-field">
+          <label for="authEmail">Correo electrónico</label>
+          <input id="authEmail" type="email" autocomplete="email" placeholder="correo@ejemplo.com" />
+        </div>
+
+        <div class="auth-field">
+          <label for="authPassword">Contraseña</label>
+          <div class="auth-password-wrap">
+            <input id="authPassword" type="password" autocomplete="current-password" placeholder="••••••••" />
+            <button id="toggleAuthPasswordBtn" class="auth-password-toggle" type="button" aria-label="Mostrar contraseña" aria-pressed="false" title="Mostrar contraseña">👁</button>
+          </div>
+        </div>
+
+        <div id="authConfirmGroup" class="auth-field auth-hidden">
+          <label for="authConfirmPassword">Confirmar contraseña</label>
+          <div class="auth-password-wrap">
+            <input id="authConfirmPassword" type="password" autocomplete="new-password" placeholder="Repite tu contraseña" />
+            <button id="toggleAuthConfirmPasswordBtn" class="auth-password-toggle" type="button" aria-label="Mostrar contraseña confirmada" aria-pressed="false" title="Mostrar contraseña">👁</button>
+          </div>
+        </div>
+
+        <div id="authPhotoGroup" class="auth-field auth-hidden">
+          <label>Foto de perfil</label>
+          <div class="auth-photo-row">
+            <div class="auth-photo-preview-wrap">
+              <img id="authPhotoPreview" src="assets/no-foto.png" alt="Vista previa de foto de perfil" />
+            </div>
+            <button id="openPhotoSourceModalBtn" class="auth-photo-btn" type="button">Subir foto</button>
+          </div>
+          <input id="authPhotoData" type="hidden" />
+          <input id="authPhotoDeviceInput" class="auth-hidden-input" type="file" accept="image/*" />
+          <input id="authPhotoCameraInput" class="auth-hidden-input" type="file" accept="image/*" capture="user" />
+        </div>
+
+        <p id="authStatus" class="auth-status" role="status" aria-live="polite"></p>
+
+        <button id="authSubmitBtn" class="auth-submit-btn" type="submit">Iniciar sesión</button>
+        <button id="authSwitchBtn" class="auth-switch-btn" type="button">¿No tienes cuenta? Regístrate</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="photoSourceModal" class="photo-source-modal" aria-hidden="true">
+    <div class="photo-source-box" role="dialog" aria-modal="true" aria-labelledby="photoSourceTitle">
+      <button id="closePhotoSourceModalBtn" class="photo-source-close" type="button" aria-label="Cerrar">✕</button>
+      <h4 id="photoSourceTitle">Seleccionar foto de perfil</h4>
+      <p>Elige cómo quieres subir tu imagen.</p>
+      <div class="photo-source-actions">
+        <button id="choosePhotoCameraBtn" type="button" class="photo-source-action">Usar cámara</button>
+        <button id="choosePhotoDeviceBtn" type="button" class="photo-source-action">Subir del dispositivo</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="cameraCaptureModal" class="camera-capture-modal" aria-hidden="true">
+    <div class="camera-capture-box" role="dialog" aria-modal="true" aria-labelledby="cameraCaptureTitle">
+      <button id="closeCameraCaptureModalBtn" class="camera-capture-close" type="button" aria-label="Cerrar">✕</button>
+      <h4 id="cameraCaptureTitle">Tomar foto de perfil</h4>
+      <p id="cameraCaptureStatus" class="camera-capture-status">Iniciando cámara...</p>
+
+      <div class="camera-capture-view">
+        <video id="cameraCaptureVideo" autoplay playsinline muted></video>
+        <canvas id="cameraCaptureCanvas"></canvas>
+      </div>
+
+      <div class="camera-capture-actions">
+        <button id="takeCameraPhotoBtn" type="button" class="camera-capture-action">Tomar foto</button>
+        <button id="retakeCameraPhotoBtn" type="button" class="camera-capture-action" disabled>Repetir</button>
+        <button id="useCameraPhotoBtn" type="button" class="camera-capture-action primary" disabled>Usar foto</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="plansModal" class="plans-modal" aria-hidden="true">
+    <div class="plans-modal-box" role="dialog" aria-modal="true" aria-labelledby="plansTitle">
+      <button id="closePlansModal" class="plans-modal-close" type="button" aria-label="Cerrar">✕</button>
+      <div class="plans-header-row">
+        <div class="plans-header-icon">★</div>
+        <div>
+          <h3 id="plansTitle" class="plans-modal-title">Elige tu plan</h3>
+          <p class="plans-modal-sub">Acceso a herramientas jurídicas avanzadas sin limitaciones</p>
+        </div>
+      </div>
+
+      <div class="plans-grid">
+        <button type="button" class="plan-card" data-plan-id="monthly" data-plan="Mensual" data-month-price="7.00" data-months="1" data-total="7.00" data-currency="USD">
+          <span class="plan-card-name">Mensual</span>
+          <strong class="plan-card-price">$7 <small>/mes</small></strong>
+          <ul class="plan-features">
+            <li>Analisis ilimitado de casos</li>
+            <li>Generacion de documentos legal</li>
+            <li>Busqueda jurisprudencia</li>
+            <li>Consultas 24/7 con IA</li>
+            <li>Almacenamiento 500 MB</li>
+          </ul>
+          <span class="plan-card-note">Cancela cuando quieras</span>
+          <span class="plan-card-action-wrap">
+            <span class="plan-subscribe-btn" role="button" tabindex="0" aria-label="Suscribirse al plan Mensual">Suscribirse</span>
+          </span>
+        </button>
+
+        <button type="button" class="plan-card featured selected" data-plan-id="semiannual" data-plan="6 Meses" data-month-price="10.00" data-months="6" data-total="10.00" data-currency="USD">
+          <span class="plan-badge">RECOMENDADO</span>
+          <span class="plan-card-name">6 Meses</span>
+          <strong class="plan-card-price">$10 <small>/mes</small></strong>
+          <ul class="plan-features">
+            <li>Todo del plan mensual</li>
+            <li>Exportar a PDF premium</li>
+            <li>Almacenamiento 2 GB</li>
+            <li>Acceso prioritario</li>
+            <li>2 plantillas personalizadas</li>
+          </ul>
+          <span class="plan-card-note">Pago unico por semestre</span>
+          <span class="plan-card-action-wrap">
+            <span class="plan-subscribe-btn" role="button" tabindex="0" aria-label="Suscribirse al plan 6 Meses">Suscribirse</span>
+          </span>
+        </button>
+
+        <button type="button" class="plan-card" data-plan-id="annual" data-plan="Anual" data-month-price="15.00" data-months="12" data-total="15.00" data-currency="USD">
+          <span class="plan-card-name">Anual</span>
+          <strong class="plan-card-price">$15 <small>/año</small></strong>
+          <ul class="plan-features">
+            <li>Todo del plan semestral</li>
+            <li>API para integracion</li>
+            <li>Almacenamiento 5 GB</li>
+            <li>Soporte por email prioritario</li>
+            <li>10 plantillas personalizadas</li>
+          </ul>
+          <span class="plan-card-note">Ahorra 21% vs mensual</span>
+          <span class="plan-card-action-wrap">
+            <span class="plan-subscribe-btn" role="button" tabindex="0" aria-label="Suscribirse al plan Anual">Suscribirse</span>
+          </span>
+        </button>
+      </div>
+
+      <section id="squarePaymentPanel" class="plans-payment-panel" aria-hidden="true" hidden>
+        <div class="plans-payment-panel-head">
+          <div>
+            <h4 id="squarePaymentPanelTitle" class="plans-payment-panel-title">Paga con tu tarjeta</h4>
+            <p id="squarePaymentPanelSubtitle" class="plans-payment-panel-sub">Procesado de forma segura por Square.</p>
+          </div>
+          <button id="backToPlansBtn" class="plans-back-btn" type="button">Cambiar plan</button>
+        </div>
+
+        <div class="plans-payment-grid">
+          <div class="payment-method-card">
+            <h4>Tarjeta de crédito o débito</h4>
+            <div id="squareCardContainer" class="square-card-container" aria-label="Formulario seguro de Square"></div>
+            <p class="payment-secure-note">Visa y Mastercard se procesan directamente en Square.</p>
+          </div>
+
+          <div class="payment-summary-card">
+            <h4>Resumen del cobro</h4>
+            <div class="summary-row"><span>Plan</span><strong id="squareSummaryPlan">Mensual</strong></div>
+            <div class="summary-row"><span>Precio</span><strong id="squareSummaryPrice">$7.00</strong></div>
+            <div class="summary-row"><span>Facturación</span><strong id="squareSummaryBilling">Pago único</strong></div>
+            <hr />
+            <div class="summary-total"><span>Total</span><strong id="squareSummaryTotal">$7.00 USD</strong></div>
+            <button id="squarePayBtn" class="plans-pay-btn" type="button">Pagar ahora</button>
+            <p id="squarePaymentHint" class="payment-secure-note">Al confirmar, Square procesa el cargo de forma inmediata.</p>
+          </div>
+        </div>
+      </section>
+
+      <p class="plans-inline-note">Al pulsar <strong>Suscribirse</strong> se abre el formulario seguro de Square. Después confirmas el cobro con tu tarjeta de crédito o débito.</p>
+      <p id="plansPaymentStatus" class="plans-payment-status" role="status" aria-live="polite"></p>
+
+      <p class="plans-help">¿Tienes dudas? Contactanos en <span>soporte@iajuris.com</span></p>
+    </div>
+  </div>
+
+  <div id="subscriptionAccessModal" class="subscription-access-modal" aria-hidden="true">
+    <div class="subscription-access-box" role="dialog" aria-modal="true" aria-labelledby="subscriptionAccessTitle">
+      <button id="closeSubscriptionAccessModal" class="subscription-access-close" type="button" aria-label="Cerrar">✕</button>
+      <h4 id="subscriptionAccessTitle" class="subscription-access-title">Acceso a suscripción</h4>
+      <p class="subscription-access-text">Para suscribirte, primero debes registrarte o iniciar sesión.</p>
+      <div class="subscription-access-actions">
+        <button id="subscriptionAccessLoginBtn" class="subscription-access-btn secondary" type="button">Iniciar sesión</button>
+        <button id="subscriptionAccessRegisterBtn" class="subscription-access-btn primary" type="button">Registrarme</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="planWelcomeModal" class="plan-welcome-modal" aria-hidden="true">
+    <div class="plan-welcome-box" role="dialog" aria-modal="true" aria-labelledby="planWelcomeTitle">
+      <button id="closePlanWelcomeModal" class="plan-welcome-close" type="button" aria-label="Cerrar">✕</button>
+      <p class="plan-welcome-kicker">Suscripción activada</p>
+      <h4 id="planWelcomeTitle" class="plan-welcome-title">Bienvenido a tu plan</h4>
+      <p id="planWelcomeText" class="plan-welcome-text">Tu suscripción ya está activa.</p>
+      <ul id="planWelcomeLimits" class="plan-welcome-limits" aria-label="Límites y beneficios del plan"></ul>
+      <button id="planWelcomeConfirmBtn" class="plan-welcome-btn" type="button">Entendido</button>
+    </div>
+  </div>
+
+  <div id="searchesModal" class="searches-modal" aria-hidden="true">
+    <div class="searches-modal-box" role="dialog" aria-modal="true" aria-labelledby="searchesTitle">
+      <button id="closeSearchesModal" class="searches-modal-close" type="button" aria-label="Cerrar">✕</button>
+      <div class="searches-header-row">
+        <div class="searches-header-icon">🔎</div>
+        <div>
+          <h3 id="searchesTitle" class="searches-modal-title">Mis búsquedas</h3>
+          <p class="searches-modal-sub">Explora y reutiliza búsquedas previas de tus conversaciones.</p>
+        </div>
+      </div>
+
+      <div class="searches-toolbar">
+        <input id="searchesInput" class="searches-input" type="text" placeholder="Filtrar búsquedas..." autocomplete="off" />
+        <p id="searchesCount" class="searches-count">0 resultados</p>
+      </div>
+
+      <div class="searches-list-wrap">
+        <ul id="searchesList" class="searches-list" aria-label="Lista de búsquedas previas"></ul>
+      </div>
+
+      <p class="searches-help">Selecciona una búsqueda para copiarla al cuadro del chat.</p>
+    </div>
+  </div>
+
+  <div id="profileModal" class="profile-modal" aria-hidden="true">
+    <div class="profile-modal-box" role="dialog" aria-modal="true" aria-labelledby="profileTitle">
+      <button id="closeProfileModal" class="profile-modal-close" type="button" aria-label="Cerrar">✕</button>
+      <h3 id="profileTitle" class="profile-modal-title">Mi perfil</h3>
+
+      <div class="profile-modal-content">
+        <img id="profileModalPhoto" class="profile-modal-photo" src="assets/no-foto.png" alt="Foto de perfil" />
+        <button id="profileChangePhotoBtn" class="profile-modal-photo-btn" type="button" aria-label="Cambiar foto de perfil">
+          <svg class="profile-modal-photo-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M4 7h4l1.5-2h5L16 7h4v12H4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+            <circle cx="12" cy="13" r="3.2" fill="none" stroke="currentColor" stroke-width="1.8"></circle>
+          </svg>
+          Cambiar foto de perfil
+        </button>
+
+        <div class="profile-modal-field">
+          <span class="profile-modal-label">Email</span>
+          <p id="profileModalEmail" class="profile-modal-value">No disponible</p>
+        </div>
+
+        <div class="profile-modal-field">
+          <span class="profile-modal-label">Profesión</span>
+          <p id="profileModalProfession" class="profile-modal-value">General</p>
+        </div
+
+        <div class="profile-modal-field">
+          <span class="profile-modal-label">Plan de pago</span>
+          <p id="profileModalPlan" class="profile-modal-value">Plan Invitado</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal descarga de apps -->
+  <div id="downloadAppModal" class="dl-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="dlModalTitle">
+    <div class="dl-modal-backdrop"></div>
+    <div class="dl-modal-box">
+      <button id="closeDownloadAppModal" class="dl-modal-close" type="button" aria-label="Cerrar">&times;</button>
+      <h2 id="dlModalTitle" class="dl-modal-title">Descarga IA Juris</h2>
+      <p class="dl-modal-sub">Lleva el asistente legal en tu bolsillo</p>
+      <div class="dl-modal-cards">
+        <div class="dl-card dl-card-android">
+          <div class="dl-card-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.18 15.64a2.18 2.18 0 1 1 0 4.36 2.18 2.18 0 0 1 0-4.36zm11.64 0a2.18 2.18 0 1 1 0 4.36 2.18 2.18 0 0 1 0-4.36zM1.5 3h1.75l.58 2H20.5l-1.94 7H6.48L5.2 7H3.25L1.5 3zm5.82 5.5 1.2 4.5h8l1.5-4.5H7.32zM14.69.31l1.56 1.56-1.27 1.27a5 5 0 1 1-5.96 0L7.75 1.87 9.31.31l1.41 1.41a3 3 0 1 0 2.56 0L14.69.31z"/></svg>
+          </div>
+          <h3 class="dl-card-name">Android</h3>
+          <p id="androidVersionLabel" class="dl-card-ver">v11.0 — Disponible</p>
+          <a id="androidApkLink" class="dl-card-btn" href="https://ia-juris-app.vercel.app/downloads/IA-Juris-Android-Release-v11.0.apk" download="IA-Juris-Android-Release-v11.0.apk" aria-label="Descargar APK Android">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>
+            Descargar APK
+          </a>
+          <p class="dl-card-note">Enlace directo anclado: <a href="https://ia-juris-app.vercel.app/downloads/IA-Juris-Android-Release-v11.0.apk" download="IA-Juris-Android-Release-v11.0.apk">IA-Juris-Android-Release-v11.0.apk</a></p>
+        </div>
+        <div class="dl-card dl-card-ios">
+          <div class="dl-card-icon dl-card-icon-ios">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          </div>
+          <h3 class="dl-card-name">iPhone</h3>
+          <p class="dl-card-ver">App Store</p>
+          <span class="dl-card-soon">Coming soon</span>
+        </div>
+      </div>
+      <p class="dl-modal-note">Instala el APK habilitando fuentes desconocidas en Ajustes &rsaquo; Seguridad en tu Android.</p>
+    </div>
+  </div>
+
+  <script>
+    window.SQUARE_CONFIG = {
+      sandbox: {
+        applicationId: "sandbox-sq0idb-qDbRLXqTqFIKTrkfMN93aQ",
+        locationId: "LVHB12G100F0M"
+      },
+      production: {
+        applicationId: "sq0idp-Nv9opnu69Iq85GOyLH1DUg",
+        locationId: "LGHMFMY2TZYZS"
+      }
+    };
+  </script>
+
+  <script src="main.js?v=20260614-open-no-interpretation-v2"></script>
 </body>
 </html>
