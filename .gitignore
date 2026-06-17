@@ -3,3 +3,5 @@
 *.config.json
 scripts/ia_juris_business_launcher.config.json
 proyecto_eliosmind2b.config.json
+node_modules
+node_modules
