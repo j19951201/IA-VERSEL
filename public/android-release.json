@@ -1,6 +1,6 @@
 ﻿{
     "latestVersion":  "11.0",
-    "apkUrl":  "https://ia-juris-app.vercel.app/downloads/IA-Juris-Android-Release-v11.0.apk",
+    "apkUrl":  "https://raw.githubusercontent.com/j19951201/IA-VERSEL/main/public/downloads/IA-Juris-Android-Release-v11.0.apk",
     "landingUrl":  "https://ia-juris-app.vercel.app/?androidTrial=1#heroSection",
     "useLandingPageDuringTrial":  false,
     "notes":  "Actualizacion Android v11.0: instalador Android actualizado, correccion de apertura inicial y estabilidad general."
