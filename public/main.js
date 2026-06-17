@@ -2802,6 +2802,23 @@ FORMATO OBLIGATORIO:
     }
 
     if (normaQueryFlow.stage === "awaiting-question") {
+      const generalCue = isGeneralInfoQuery(value) || /\b(hablame de|háblame de|quien es|quién es|quien fue|quién fue|biografia|biografía|historia de|capital de|poblacion de|población de|fecha de nacimiento|nacio|nació|murio|murió)\b/i.test(value);
+      if (generalCue) {
+        normaQueryFlow.stage = "idle";
+        normaQueryFlow.country = "";
+        setConsultationType("general");
+        if (chatInput) {
+          chatInput.value = "";
+          chatInput.placeholder = "Escribe tu consulta general o legal...";
+        }
+        return {
+          handled: false,
+          replyText: null,
+          requestText: value,
+          relatedQuery: value
+        };
+      }
+
       const request = buildNormaGeneralRequest(normaQueryFlow.country, value);
       normaQueryFlow.stage = "idle";
       if (chatInput) {
@@ -4896,7 +4913,8 @@ FORMATO OBLIGATORIO:
   async function buildWikipediaDirectAnswer(queryText) {
     try {
       const entity = extractSearchEntityFromQuery(queryText);
-      const preferEnglish = detectPreferredReplyLanguage(queryText) === "en" || looksLikeEnglishName(entity);
+      const preferredLang = detectPreferredReplyLanguage(queryText);
+      const preferEnglish = preferredLang === "en";
 
       async function searchWiki(lang, term) {
         const url = new URL("https://" + lang + ".wikipedia.org/w/api.php");
@@ -4927,8 +4945,9 @@ FORMATO OBLIGATORIO:
 
       let extract = await fetchWikipediaExtract(foundLang, foundTitle);
 
-      // Fallback al otro idioma si el extracto es muy corto
-      if (!extract || extract.length < 80) {
+      // Fallback al otro idioma si el extracto es muy corto.
+      // Para consultas en espanol no cambiamos a ingles para evitar respuestas fuera de idioma.
+      if ((!extract || extract.length < 80) && preferEnglish) {
         const otherLang = foundLang === "en" ? "es" : "en";
         const otherTitle = await searchWiki(otherLang, entity);
         if (otherTitle) {
@@ -6722,21 +6741,24 @@ FORMATO OBLIGATORIO:
     recognition.onresult = function (event) {
       let finalChunk = "";
       let interim = "";
-      for (let i = 0; i < event.results.length; i++) {
+      const startIndex = Number.isInteger(event.resultIndex) ? event.resultIndex : 0;
+      // Important: process only new slices; iterating full results on each event duplicates text.
+      for (let i = startIndex; i < event.results.length; i++) {
         const result = event.results[i];
+        if (!result || !result[0] || typeof result[0].transcript !== "string") continue;
         if (result.isFinal) {
-          finalChunk += result[0].transcript;
+          finalChunk += " " + result[0].transcript;
         } else {
-          interim += result[0].transcript;
+          interim += " " + result[0].transcript;
         }
       }
       if (finalChunk) {
-        voiceFinalTranscript = (voiceFinalTranscript + " " + finalChunk).trim();
+        voiceFinalTranscript = (voiceFinalTranscript + " " + finalChunk).replace(/\s+/g, " ").trim();
       }
-      voiceInterimTranscript = interim;
+      voiceInterimTranscript = interim.replace(/\s+/g, " ").trim();
       voiceTranscript.innerHTML =
         (voiceFinalTranscript ? "<span>" + escapeHtml(voiceFinalTranscript) + "</span>" : "") +
-        (interim ? "<span class='interim'> " + interim + "</span>" : "");
+        (voiceInterimTranscript ? "<span class='interim'> " + escapeHtml(voiceInterimTranscript) + "</span>" : "");
       voiceTranscript.scrollTop = voiceTranscript.scrollHeight;
     };
 
