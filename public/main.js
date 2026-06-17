@@ -6518,6 +6518,8 @@ FORMATO OBLIGATORIO:
   let holdToTalkActive = false;
   let voiceToggleStartAt = 0;
   let voicePlaybackPrimed = false;
+  let voiceMicPermissionGranted = false;
+  let voicePermissionRequestInFlight = false;
 
   function primeSpeechPlaybackOnGesture() {
     if (voicePlaybackPrimed) return;
@@ -6555,6 +6557,45 @@ FORMATO OBLIGATORIO:
     if (voiceRestartTimerId) {
       clearTimeout(voiceRestartTimerId);
       voiceRestartTimerId = null;
+    }
+  }
+
+  async function ensureVoiceMicPermission() {
+    if (voiceMicPermissionGranted) return true;
+    if (voicePermissionRequestInFlight) return false;
+
+    if (!navigator.mediaDevices || typeof navigator.mediaDevices.getUserMedia !== "function") {
+      // Some engines expose SpeechRecognition but not mediaDevices.
+      return true;
+    }
+
+    voicePermissionRequestInFlight = true;
+    try {
+      try {
+        if (navigator.permissions && typeof navigator.permissions.query === "function") {
+          const status = await navigator.permissions.query({ name: "microphone" });
+          if (status && status.state === "denied") {
+            return false;
+          }
+        }
+      } catch (_ignored) {
+        // Permission query is optional; continue with getUserMedia prompt.
+      }
+
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      try {
+        const tracks = stream && typeof stream.getTracks === "function" ? stream.getTracks() : [];
+        tracks.forEach(function (track) {
+          try { track.stop(); } catch (_err) {}
+        });
+      } catch (_stopErr) {}
+
+      voiceMicPermissionGranted = true;
+      return true;
+    } catch (_err) {
+      return false;
+    } finally {
+      voicePermissionRequestInFlight = false;
     }
   }
 
@@ -6701,7 +6742,7 @@ FORMATO OBLIGATORIO:
     }
   }
 
-  function startVoiceRecognition(options) {
+  async function startVoiceRecognition(options) {
     const cfg = Object.assign({ resume: false }, options || {});
     if (activeRecognition) return;
 
@@ -6713,6 +6754,22 @@ FORMATO OBLIGATORIO:
       setStartVoiceBtnRecordingState(false);
       voiceTranscript.textContent = "Tu navegador no soporta reconocimiento de voz.";
       return;
+    }
+
+    if (!cfg.resume) {
+      const hasMicPermission = await ensureVoiceMicPermission();
+      if (!hasMicPermission) {
+        voiceSessionActive = false;
+        voiceStopRequested = false;
+        voiceIsListening = false;
+        setStartVoiceBtnRecordingState(false);
+        setStartVoiceBtnProcessingState(false);
+        setStartVoiceBtnSpeakingState(false);
+        if (voiceTranscript) {
+          voiceTranscript.textContent = "No se pudo activar el micrófono. Ve a Ajustes de la app y habilita Permiso de micrófono.";
+        }
+        return;
+      }
     }
 
     clearVoiceRestartTimer();
@@ -6826,7 +6883,20 @@ FORMATO OBLIGATORIO:
       finalizeVoiceCaptureAndSend();
     };
 
-    recognition.start();
+    try {
+      recognition.start();
+    } catch (_startErr) {
+      voiceSessionActive = false;
+      voiceStopRequested = false;
+      voiceIsListening = false;
+      activeRecognition = null;
+      setStartVoiceBtnRecordingState(false);
+      setStartVoiceBtnProcessingState(false);
+      setStartVoiceBtnSpeakingState(false);
+      if (voiceTranscript) {
+        voiceTranscript.textContent = "No fue posible iniciar el micrófono. Revisa permisos de audio e inténtalo de nuevo.";
+      }
+    }
   }
 
   function stopVoiceRecognition() {
