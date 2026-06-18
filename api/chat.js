@@ -5396,16 +5396,16 @@ function buildBiographyNoVerifiedDataResponse(question) {
   if (lang === "en") {
     return [
       `Biography of ${subject}:`,
-      "Public figure with notable historical and political relevance, with a trajectory linked to institutional life in the Dominican Republic.",
-      "This profile spans stages of education, professional activity, and political leadership across different periods, with decisions that influenced national debate.",
-      "In broad terms, this legacy is usually analyzed through institutional impact, historical context, and the controversies of each stage."
+      "I could not verify enough reliable public data in this attempt to provide an accurate biography without risking factual errors.",
+      "Please retry with the full name, country context, and a time period (for example: \"Donald Trump, United States, public career\").",
+      "With that, I can return a chronological profile focused on birth, early life, education, and career."
     ].join(" ");
   }
   return [
     `Biografia de ${subject}:`,
-    `Figura publica de alta relevancia historica y politica, con una trayectoria marcada por su presencia sostenida en la vida institucional de Republica Dominicana.`,
-    "Su recorrido combina etapas de formacion, actividad intelectual y liderazgo politico en distintos periodos, con decisiones que influyeron en el debate nacional.",
-    "En una lectura abierta, su legado suele analizarse por impacto institucional, contexto historico y controversias propias de su epoca."
+    "No pude verificar suficientes datos publicos confiables en este intento para redactar una biografia exacta sin riesgo de mezclar hechos.",
+    "Vuelve a consultarme con nombre completo, pais de referencia y periodo (por ejemplo: \"Donald Trump, Estados Unidos, trayectoria publica\").",
+    "Con eso te respondo en orden cronologico: nacimiento, inicios, educacion y carrera."
   ].join(" ");
 }
 
