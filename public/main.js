@@ -3371,16 +3371,14 @@ FORMATO OBLIGATORIO:
     return [
       "Redacta una biografia en espanol de " + cleanSubject + " con este esquema EXACTO:",
       "",
-      "1) Parrafo de apertura con identificacion de la persona y contexto temporal.",
-      "2) Titulo: Origenes y Formacion Academica.",
-      "   - Familia: datos verificables.",
-      "   - Estudios: formacion y especializaciones verificables.",
-      "3) Titulo: Carrera Profesional.",
-      "4) Titulo: Trayectoria Publica.",
-      "   - Inicios.",
-      "   - Ascenso.",
-      "   - Hitos principales.",
-      "5) Titulo: Legado e Impacto.",
+      "1) Nacimiento.",
+      "   - Fecha y lugar de nacimiento (si se conoce).",
+      "2) Inicios en la vida.",
+      "   - Contexto familiar y primeros anos (sin inventar).",
+      "3) Educacion.",
+      "   - Estudios, centros educativos, titulos o formacion (si aplica).",
+      "4) Carrera.",
+      "   - Inicio profesional, evolucion y logros principales.",
       "",
       "Reglas:",
       "- Narrar la vida de forma cronologica.",
@@ -3389,6 +3387,62 @@ FORMATO OBLIGATORIO:
       "- Evitar explicaciones meta sobre como responder.",
       "",
       "Consulta original del usuario: " + cleanUserText
+    ].join("\n");
+  }
+
+  function buildStructuredBiographyFromExtract(subject, extract) {
+    const cleanSubject = String(subject || "la persona consultada").trim() || "la persona consultada";
+    const cleanExtract = String(extract || "").replace(/\s+/g, " ").trim();
+    if (!cleanExtract) return "";
+
+    const sentences = cleanExtract
+      .split(/(?<=[\.\!\?])\s+/)
+      .map(function (s) { return String(s || "").trim(); })
+      .filter(function (s) { return s.length > 25; });
+
+    const used = new Set();
+    function pickByKeywords(keywords) {
+      for (let i = 0; i < sentences.length; i++) {
+        if (used.has(i)) continue;
+        const lower = sentences[i].toLowerCase();
+        for (let k = 0; k < keywords.length; k++) {
+          if (lower.indexOf(keywords[k]) !== -1) {
+            used.add(i);
+            return sentences[i];
+          }
+        }
+      }
+      return "";
+    }
+
+    const nacimiento = pickByKeywords(["nacio", "nacido", "nacimiento", "fecha de nacimiento", "lugar de nacimiento"])
+      || sentences[0]
+      || "No se encontraron datos claros de nacimiento en el extracto consultado.";
+
+    const inicios = pickByKeywords(["infancia", "juventud", "primeros anos", "inicios", "comenzo", "inicio"])
+      || "No se detallan claramente los inicios de vida en el extracto consultado.";
+
+    const educacion = pickByKeywords(["estudio", "educacion", "formacion", "universidad", "escuela", "licenciatura", "doctorado", "maestria"])
+      || "No se especifica informacion academica suficiente en el extracto consultado.";
+
+    const carrera = pickByKeywords(["carrera", "trabajo", "desempeno", "fue", "presidente", "actor", "empresario", "profesion", "cargo"])
+      || sentences[Math.min(1, Math.max(0, sentences.length - 1))]
+      || "No se describen hitos de carrera de forma suficiente en el extracto consultado.";
+
+    return [
+      "Biografia de " + cleanSubject + ":",
+      "",
+      "1) Nacimiento.",
+      "- " + nacimiento,
+      "",
+      "2) Inicios en la vida.",
+      "- " + inicios,
+      "",
+      "3) Educacion.",
+      "- " + educacion,
+      "",
+      "4) Carrera.",
+      "- " + carrera
     ].join("\n");
   }
 
@@ -5008,8 +5062,11 @@ FORMATO OBLIGATORIO:
       if (!extract) return null;
 
       const wikiPageUrl = "https://" + foundLang + ".wikipedia.org/wiki/" + encodeURIComponent(foundTitle.replace(/ /g, "_"));
+      const structuredBiography = isBiographyImagePrompt(queryText)
+        ? buildStructuredBiographyFromExtract(entity, extract)
+        : "";
       return {
-        text: extract.slice(0, 1000),
+        text: structuredBiography || extract.slice(0, 1000),
         sources: [wikiPageUrl, "https://google.com/search?q=" + encodeURIComponent(entity)]
       };
     } catch (_err) {
