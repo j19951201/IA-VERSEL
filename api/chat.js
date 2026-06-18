@@ -8057,7 +8057,7 @@ module.exports = async function handler(req, res) {
 
     const quickBioText = wikiBioFast && wikiBioFast.text
       ? buildFactualBiographyResponse(userQuestion, wikiBioFast.text, wikiBioFast.source)
-      : buildBiographyNoVerifiedDataResponse(userQuestion);
+      : "";
 
     const quickSources = wikiBioFast && wikiBioFast.source
       ? uniqueHttpUrls([wikiBioFast.source])
@@ -8085,19 +8085,19 @@ module.exports = async function handler(req, res) {
       sources: quickSources,
       image: quickImages,
       model: getDefaultUpstreamModel(),
-      quality_mode: wikiBioFast && wikiBioFast.text ? "vercel-biography-fast-factual" : "vercel-biography-fast-fallback"
+      quality_mode: wikiBioFast && wikiBioFast.text ? "vercel-biography-fast-factual" : "vercel-biography-fast-no-fallback"
     });
     return;
   }
 
   if (IS_VERCEL_RUNTIME && !VERCEL_FREE_TEXT_ONLY && (isFoodQuery(userQuestion) || /\breceta\b|\bingredientes\b|\bpreparar\b|\bcocinar\b/.test(normalizeForIntent(userQuestion)))) {
-    const quickRecipeText = buildOpenRecipeFallback(userQuestion);
+    const quickRecipeText = "";
     res.status(200).json({
       response: sanitizeForbiddenMetaPhrases(enforceMaximumLength(quickRecipeText, MAX_PUBLIC_RESPONSE_CHARS)),
       sources: [],
       image: [],
       model: getDefaultUpstreamModel(),
-      quality_mode: "vercel-recipe-fast-fallback"
+      quality_mode: "vercel-recipe-fast-no-fallback"
     });
     return;
   }
@@ -8125,7 +8125,7 @@ module.exports = async function handler(req, res) {
     );
     const quickHistoryText = wikiHistoryFast && wikiHistoryFast.text
       ? buildFactualTopicResponse(userQuestion, wikiHistoryFast.text)
-      : buildHistoryNarrativeFallback(userQuestion);
+      : "";
     const quickHistorySources = wikiHistoryFast && wikiHistoryFast.source
       ? uniqueHttpUrls([wikiHistoryFast.source])
       : [];
@@ -8135,7 +8135,7 @@ module.exports = async function handler(req, res) {
       sources: quickHistorySources,
       image: [],
       model: getDefaultUpstreamModel(),
-      quality_mode: wikiHistoryFast && wikiHistoryFast.text ? "vercel-history-fast-factual" : "vercel-history-fast-fallback"
+      quality_mode: wikiHistoryFast && wikiHistoryFast.text ? "vercel-history-fast-factual" : "vercel-history-fast-no-fallback"
     });
     return;
   }
