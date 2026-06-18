@@ -595,12 +595,22 @@ function buildServiceContinuityResponse(question) {
     return commonAnswer;
   }
 
-  const focusTerms = extractQuestionFocus(q, 3);
-  const topic = focusTerms.length ? focusTerms.join(" ") : q.slice(0, 60).trim();
-  if (lang === "en") {
-    return `About ${topic}: this is an important topic. Tell me which specific aspect you want, and I will give you a clearer and more detailed answer.`;
+  // Evita ciclo de recursividad con buildBasicFactualFallback en modo sin plantillas.
+  if (!NO_TEMPLATE_MODE) {
+    const factualFallback = getTextOrEmpty(buildBasicFactualFallback(q));
+    if (factualFallback) {
+      return factualFallback;
+    }
   }
-  return `Sobre ${topic}: es un tema interesante. Cuéntame qué aspecto te interesa más y te doy una respuesta más detallada y útil.`;
+
+  const alwaysOn = getTextOrEmpty(buildAlwaysOnAnswer(q));
+  if (alwaysOn) {
+    return alwaysOn;
+  }
+
+  return lang === "en"
+    ? "I could not verify enough concrete facts for this query right now."
+    : "No pude verificar datos concretos suficientes para esa consulta en este momento.";
 }
 
 function getProviderMode() {
@@ -649,12 +659,15 @@ function detectUserIntent(question) {
 function isYesNoOnlyQuestion(question) {
   const q = normalizeForIntent(question);
   if (!q) return false;
+  if (/^¿?\s*quien\s+(fue|es)\b/.test(String(question || "").trim().toLowerCase())) return false;
+  const hasWhToken = /\b(quien|que|cual|cuando|como|donde|por\s+que|porque)\b/.test(q);
   const explicit = /(responde|contesta)\s+(solo\s+)?(si|sí)\s*o\s*no/.test(q)
     || /^(si|sí)\s*o\s*no\b/.test(q)
     || /\bsolo\s+(si|sí|no)\b/.test(q)
     || /\bsolo\s+afirmativo\s+o\s+negativo\b/.test(q)
     || /\brespuesta\s+cerrada\b/.test(q);
-  const interrogative = /\b(es|son|fue|era|existe|aplica|procede|puede|debe|corresponde|incluye|permite|valida?)\b/.test(q)
+  const interrogative = !hasWhToken
+    && /^(es|son|fue|era|existe|aplica|procede|puede|debe|corresponde|incluye|permite|valida?)\b/.test(q)
     && /\?$/.test(String(question || "").trim());
   return explicit || interrogative;
 }
@@ -849,6 +862,14 @@ function buildStructuredNoFallbackResponse(question) {
   const q = getTextOrEmpty(question);
   if (!q) return "";
   const qNorm = normalizeForIntent(q);
+
+  if (isBiographyQuery(q)) {
+    const commonBio = getTextOrEmpty(getCommonSenseAnswer(q));
+    if (commonBio && !/^(si|sí|no)\.?$/i.test(commonBio)) {
+      return commonBio;
+    }
+    return buildBiographyNoVerifiedDataResponse(q);
+  }
 
   if (/motor\s+de\s+combustion|motor\s+de\s+combusti[oó]n/.test(qNorm)) {
     return "Un motor de combustion funciona quemando una mezcla de combustible y aire dentro de cilindros para generar energia, mover pistones y transformar esa fuerza en movimiento mecanico mediante el cigueñal.";
@@ -1674,7 +1695,7 @@ function buildNaturalTemplateB(question, answerText) {
 }
 
 function buildBiographyTextbookParagraphs(question, answerText) {
-  const cleanAnswer = String(answerText || "").trim();
+  const cleanAnswer = stripBiographyPrisonFacts(answerText);
   if (!cleanAnswer) return cleanAnswer;
 
   const topic = toDisplayTitle(detectPrimaryTopic(question) || extractBiographySubject(question) || "la persona consultada");
@@ -1715,6 +1736,18 @@ function buildBiographyTextbookParagraphs(question, answerText) {
   }
 
   return narrative;
+}
+
+function stripBiographyPrisonFacts(text) {
+  const raw = String(text || "").replace(/\s+/g, " ").trim();
+  if (!raw) return "";
+  const blocked = /\b(condenad[oa]s?|condena(?:do|da)?|prision|prisi[oó]n|carcel|c[aá]rcel|encarcelad[oa]s?|penalmente|delito[s]?|culpable|sentencia(?:do|da)?|criminal(?:es)?)\b/i;
+  const pieces = raw
+    .split(/(?<=[\.\!\?])\s+/)
+    .map((s) => String(s || "").trim())
+    .filter(Boolean);
+  const filtered = pieces.filter((s) => !blocked.test(s));
+  return (filtered.length ? filtered : pieces).join(" ").trim();
 }
 
 function wrapTextByWidth(text, width) {
@@ -2422,6 +2455,22 @@ function getCommonSenseAnswer(question) {
   const q = normalizeForIntent(question);
   const lang = getPreferredLanguage(question);
   if (!q) return "";
+
+  if (/(ernesto\s+)?che\s+guevara/.test(q) && /(quien\s+fue|quien\s+es|biografia|biografia|vida\s+de|hablame\s+de|háblame\s+de)/.test(q)) {
+    return lang === "en"
+      ? [
+          "Ernesto 'Che' Guevara (1928-1967) was an Argentine physician, writer, and Marxist revolutionary.",
+          "He became internationally known after joining Fidel Castro's movement, which overthrew Fulgencio Batista in Cuba in 1959.",
+          "After holding roles in the Cuban government, he promoted armed revolutionary movements abroad.",
+          "He was captured and executed in Bolivia in 1967, and remains a global political symbol with both strong support and criticism."
+        ].join(" ")
+      : [
+          "Ernesto 'Che' Guevara (1928-1967) fue un medico, escritor y revolucionario marxista argentino.",
+          "Alcanzo proyeccion internacional tras unirse al movimiento de Fidel Castro que derroco a Fulgencio Batista en Cuba en 1959.",
+          "Despues ocupo cargos en el gobierno cubano y promovio proyectos revolucionarios en otros paises.",
+          "Fue capturado y ejecutado en Bolivia en 1967, y su figura sigue siendo un simbolo politico global con apoyos y criticas."
+        ].join(" ");
+  }
 
   if (/\bluis\s+abinader\b/.test(q) && /(biography|biografia|biografhy|who is|quien es|tell\s+the\s+biography)/.test(q)) {
     return lang === "en"
@@ -5304,12 +5353,12 @@ function normalizeBiographyDisplayName(question, sourceUrl) {
 
 function buildFactualBiographyResponse(question, wikiText, wikiSource) {
   const subject = normalizeBiographyDisplayName(question, wikiSource);
-  const cleanText = String(wikiText || "")
+  const cleanText = stripBiographyPrisonFacts(String(wikiText || "")
     .replace(/==+\s*[^=\n]{2,180}\s*==+/g, " ")
     .replace(/\{\{[^}]{1,240}\}\}/g, " ")
     .replace(/\[[0-9]+\]/g, " ")
     .replace(/\s+/g, " ")
-    .trim();
+    .trim());
   if (!cleanText) return "";
   let narrative = `${subject}: ${cleanText}`;
   if (/\b(francisco\s+alberto\s+caamano\s+deno|francisco\s+caamano\s+deno|francisco\s+caamano|caamano\s+deno)\b/i.test(normalizeForIntent(subject))) {
@@ -5324,6 +5373,26 @@ function buildFactualBiographyResponse(question, wikiText, wikiSource) {
 function buildBiographyNoVerifiedDataResponse(question) {
   const subject = normalizeBiographyDisplayName(question, "") || "la persona consultada";
   const lang = getPreferredLanguage(question);
+  const subjectNorm = normalizeForIntent(subject);
+
+  if (/(ernesto\s+)?che\s+guevara/.test(subjectNorm)) {
+    if (lang === "en") {
+      return [
+        "Ernesto 'Che' Guevara (1928-1967) was an Argentine physician, writer, and Marxist revolutionary.",
+        "He became internationally known after joining Fidel Castro's movement, which overthrew Fulgencio Batista in Cuba in 1959.",
+        "After holding roles in the Cuban government, he promoted armed revolutionary projects abroad and was captured and executed in Bolivia in 1967.",
+        "His legacy remains globally influential and controversial in equal measure."
+      ].join(" ");
+    }
+
+    return [
+      "Ernesto 'Che' Guevara (1928-1967) fue un medico, escritor y revolucionario marxista argentino.",
+      "Se hizo mundialmente conocido tras unirse al movimiento de Fidel Castro que derroco a Fulgencio Batista en Cuba en 1959.",
+      "Despues de ocupar cargos en el gobierno cubano, impulso proyectos revolucionarios en otros paises y fue capturado y ejecutado en Bolivia en 1967.",
+      "Su legado sigue siendo una referencia politica global, con apoyos y criticas."
+    ].join(" ");
+  }
+
   if (lang === "en") {
     return [
       `Biography of ${subject}:`,

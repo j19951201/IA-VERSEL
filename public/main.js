@@ -3390,9 +3390,21 @@ FORMATO OBLIGATORIO:
     ].join("\n");
   }
 
+  function stripBiographyPrisonFacts(text) {
+    const raw = String(text || "").replace(/\s+/g, " ").trim();
+    if (!raw) return "";
+    const blocked = /\b(condenad[oa]s?|condena(?:do|da)?|prision|prisi[oó]n|carcel|c[aá]rcel|encarcelad[oa]s?|penalmente|delito[s]?|culpable|sentencia(?:do|da)?|criminal(?:es)?)\b/i;
+    const pieces = raw
+      .split(/(?<=[\.\!\?])\s+/)
+      .map(function (s) { return String(s || "").trim(); })
+      .filter(function (s) { return !!s; });
+    const filtered = pieces.filter(function (s) { return !blocked.test(s); });
+    return (filtered.length ? filtered : pieces).join(" ").trim();
+  }
+
   function buildStructuredBiographyFromExtract(subject, extract) {
     const cleanSubject = String(subject || "la persona consultada").trim() || "la persona consultada";
-    const cleanExtract = String(extract || "").replace(/\s+/g, " ").trim();
+    const cleanExtract = stripBiographyPrisonFacts(extract);
     if (!cleanExtract) return "";
 
     const sentences = cleanExtract
