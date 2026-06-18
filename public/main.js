@@ -3007,7 +3007,15 @@ FORMATO OBLIGATORIO:
 
   function formatBotResponse(text) {
     const decoratedText = addContextEmoji(text);
-    const lines = String(decoratedText || "").split("\n").filter(line => line.trim());
+    const preStructuredText = String(decoratedText || "")
+      .replace(/:\s*(\d{1,2}[\)\.])/g, ":\n$1")
+      .replace(/\s+(\d{1,2}[\)\.])\s+/g, "\n$1 ")
+      .replace(/\s+([\-•])\s+/g, "\n$1 ");
+
+    const lines = preStructuredText
+      .split("\n")
+      .map(function (line) { return String(line || "").trim(); })
+      .filter(function (line) { return !!line; });
     let html = "";
 
     function renderInline(raw) {
@@ -3078,17 +3086,54 @@ FORMATO OBLIGATORIO:
       return safe;
     }
 
+    let openList = "";
+
+    function closeListIfOpen() {
+      if (!openList) return;
+      html += openList === "ol" ? "</ol>" : "</ul>";
+      openList = "";
+    }
+
+    function ensureList(type) {
+      if (openList === type) return;
+      closeListIfOpen();
+      if (type === "ol") {
+        html += "<ol class='message-bot-list ordered'>";
+      } else {
+        html += "<ul class='message-bot-list'>";
+      }
+      openList = type;
+    }
+
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i].trim();
       if (!line) continue;
 
+      const orderedMatch = line.match(/^(\d{1,2})[\)\.]\s+(.+)$/);
+      if (orderedMatch) {
+        ensureList("ol");
+        html += "<li>" + renderInline(orderedMatch[2]) + "</li>";
+        continue;
+      }
+
+      const unorderedMatch = line.match(/^[\-•]\s+(.+)$/);
+      if (unorderedMatch) {
+        ensureList("ul");
+        html += "<li>" + renderInline(unorderedMatch[1]) + "</li>";
+        continue;
+      }
+
+      closeListIfOpen();
+
       if (line.endsWith(":")) {
-        html += "<p style='font-weight: 700; margin: 8px 0 4px;'>" + renderInline(line) + "</p>";
+        html += "<p class='message-bot-heading'>" + renderInline(line) + "</p>";
       } else {
-        html += "<p style='margin: 4px 0;'>" + renderInline(line) + "</p>";
+        html += "<p class='message-bot-paragraph'>" + renderInline(line) + "</p>";
       }
     }
-    return html || "<p>" + renderInline(decoratedText) + "</p>";
+
+    closeListIfOpen();
+    return html || "<p class='message-bot-paragraph'>" + renderInline(decoratedText) + "</p>";
   }
 
   function escapeHtml(text) {
@@ -6413,6 +6458,20 @@ FORMATO OBLIGATORIO:
       };
       utterance.onerror = function () {
         setStartVoiceBtnSpeakingState(false);
+        if (!nativeFallbackUsed && shouldTryNativeTts()) {
+          speakAsMaria(cleanText, {
+            force: forceSpeak,
+            skipUnlockFallback: skipUnlockFallback,
+            preferWeb: false,
+            nativeFallbackUsed: true,
+            langHint: preferredLang
+          });
+          return;
+        }
+        if (voiceTranscript) {
+          voiceTranscript.innerHTML += "<span class='interim'> No pude reproducir audio. Revisa volumen multimedia y permisos de audio.</span>";
+          voiceTranscript.scrollTop = voiceTranscript.scrollHeight;
+        }
       };
       utterance.onend = function () {
         if ((!isVoiceModalOpen && !forceSpeak) || !didStart) {
@@ -6520,6 +6579,7 @@ FORMATO OBLIGATORIO:
   let voicePlaybackPrimed = false;
   let voiceMicPermissionGranted = false;
   let voicePermissionRequestInFlight = false;
+  let voicePermissionRequestPromise = null;
 
   function primeSpeechPlaybackOnGesture() {
     if (voicePlaybackPrimed) return;
@@ -6562,7 +6622,13 @@ FORMATO OBLIGATORIO:
 
   async function ensureVoiceMicPermission() {
     if (voiceMicPermissionGranted) return true;
-    if (voicePermissionRequestInFlight) return false;
+    if (voicePermissionRequestInFlight && voicePermissionRequestPromise) {
+      try {
+        return await voicePermissionRequestPromise;
+      } catch (_err) {
+        return false;
+      }
+    }
 
     if (!navigator.mediaDevices || typeof navigator.mediaDevices.getUserMedia !== "function") {
       // Some engines expose SpeechRecognition but not mediaDevices.
@@ -6570,32 +6636,39 @@ FORMATO OBLIGATORIO:
     }
 
     voicePermissionRequestInFlight = true;
-    try {
+    voicePermissionRequestPromise = (async function () {
       try {
-        if (navigator.permissions && typeof navigator.permissions.query === "function") {
-          const status = await navigator.permissions.query({ name: "microphone" });
-          if (status && status.state === "denied") {
-            return false;
+        try {
+          if (navigator.permissions && typeof navigator.permissions.query === "function") {
+            const status = await navigator.permissions.query({ name: "microphone" });
+            if (status && status.state === "denied") {
+              return false;
+            }
           }
+        } catch (_ignored) {
+          // Permission query is optional; continue with getUserMedia prompt.
         }
-      } catch (_ignored) {
-        // Permission query is optional; continue with getUserMedia prompt.
+
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        try {
+          const tracks = stream && typeof stream.getTracks === "function" ? stream.getTracks() : [];
+          tracks.forEach(function (track) {
+            try { track.stop(); } catch (_err) {}
+          });
+        } catch (_stopErr) {}
+
+        voiceMicPermissionGranted = true;
+        return true;
+      } catch (_err) {
+        return false;
       }
+    })();
 
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      try {
-        const tracks = stream && typeof stream.getTracks === "function" ? stream.getTracks() : [];
-        tracks.forEach(function (track) {
-          try { track.stop(); } catch (_err) {}
-        });
-      } catch (_stopErr) {}
-
-      voiceMicPermissionGranted = true;
-      return true;
-    } catch (_err) {
-      return false;
+    try {
+      return await voicePermissionRequestPromise;
     } finally {
       voicePermissionRequestInFlight = false;
+      voicePermissionRequestPromise = null;
     }
   }
 
@@ -6821,6 +6894,7 @@ FORMATO OBLIGATORIO:
 
     recognition.onerror = function (event) {
       if (event.error === "not-allowed" || event.error === "service-not-allowed") {
+        voiceMicPermissionGranted = false;
         voiceSessionActive = false;
         voiceStopRequested = false;
         voiceIsListening = false;
