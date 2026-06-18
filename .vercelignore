@@ -1,11 +1,3 @@
-*
-!api/
-!api/**
-!public/
-!public/**
-!package.json
-!vercel.json
-!capacitor.config.json
 .venv-2/
 .venv-3/
 .git/
@@ -25,7 +17,3 @@ runtime-state/
 tools/
 .tmp*/
 *.log
-api/square-webhook.js
-api/stripe-webhook.js
-api/auth/users-report.js
-api/auth/_*.js
