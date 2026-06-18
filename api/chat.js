@@ -565,52 +565,7 @@ function uniqueModelList(models) {
 }
 
 function buildServiceContinuityResponse(question) {
-  const q = getTextOrEmpty(question);
-  const lang = getPreferredLanguage(q);
-  if (!q) {
-    return lang === "en"
-      ? "Sure, tell me how I can help you."
-      : "Claro, dime en que puedo ayudarte.";
-  }
-
-  const canonicalDominican = getDominicanCanonicalAnswer(q);
-  if (canonicalDominican) {
-    return canonicalDominican;
-  }
-
-  if (isBiographyQuery(q)) {
-    const commonBio = getCommonSenseAnswer(q);
-    if (commonBio) {
-      return expandBiographyNarrative(commonBio, q);
-    }
-    return buildBiographyNoVerifiedDataResponse(q);
-  }
-
-  if (isHistoryNarrativeQuery(q)) {
-    return buildHistoryNarrativeFallback(q);
-  }
-
-  const commonAnswer = getCommonSenseAnswer(q);
-  if (commonAnswer) {
-    return commonAnswer;
-  }
-
-  // Evita ciclo de recursividad con buildBasicFactualFallback en modo sin plantillas.
-  if (!NO_TEMPLATE_MODE) {
-    const factualFallback = getTextOrEmpty(buildBasicFactualFallback(q));
-    if (factualFallback) {
-      return factualFallback;
-    }
-  }
-
-  const alwaysOn = getTextOrEmpty(buildAlwaysOnAnswer(q));
-  if (alwaysOn) {
-    return alwaysOn;
-  }
-
-  return lang === "en"
-    ? "I could not verify enough concrete facts for this query right now."
-    : "No pude verificar datos concretos suficientes para esa consulta en este momento.";
+  return "";
 }
 
 function getProviderMode() {
@@ -859,50 +814,7 @@ function getKnownYesNoAnswer(question) {
 }
 
 function buildStructuredNoFallbackResponse(question) {
-  const q = getTextOrEmpty(question);
-  if (!q) return "";
-  const qNorm = normalizeForIntent(q);
-
-  if (isBiographyQuery(q)) {
-    const commonBio = getTextOrEmpty(getCommonSenseAnswer(q));
-    if (commonBio && !/^(si|sí|no)\.?$/i.test(commonBio)) {
-      return commonBio;
-    }
-    return buildBiographyNoVerifiedDataResponse(q);
-  }
-
-  if (/motor\s+de\s+combustion|motor\s+de\s+combusti[oó]n/.test(qNorm)) {
-    return "Un motor de combustion funciona quemando una mezcla de combustible y aire dentro de cilindros para generar energia, mover pistones y transformar esa fuerza en movimiento mecanico mediante el cigueñal.";
-  }
-
-  if (isSingleFieldExtractionQuestion(q)) {
-    const dateOnly = getKnownBirthDate(q);
-    if (dateOnly) return dateOnly;
-
-    const factualExtract = extractFirstDateLikeValue(getCommonSenseAnswer(q));
-    if (factualExtract) return factualExtract;
-
-    const alwaysOnExtract = extractFirstDateLikeValue(buildAlwaysOnAnswer(q));
-    if (alwaysOnExtract) return alwaysOnExtract;
-
-    return "Dato no verificado";
-  }
-
-  if (isYesNoOnlyQuestion(q)) {
-    const yesNo = getKnownYesNoAnswer(q);
-    if (yesNo) return yesNo;
-
-    const factualNorm = normalizeForIntent(getCommonSenseAnswer(q));
-    if (/\b(no|incorrecto|negativo|no\s+aplica|no\s+procede)\b/.test(factualNorm)) return "No.";
-    if (/\b(si|sí|correcto|afirmativo|aplica|procede)\b/.test(factualNorm)) return "Si.";
-
-    const qNormYesNo = normalizeForIntent(q);
-    if (/\b(nunca|jamas|sin\s+consecuencias|sin\s+orden\s+judicial|exenta\s+de\s+responsabilidad|siempre\s+valida|mas\s+gravosa\s+puede\s+aplicarse\s+retroactivamente)\b/.test(qNormYesNo)) {
-      return "No.";
-    }
-
-    return "Si.";
-  }
+  return "";
 
   if (/ada\s+lovelace/.test(qNorm)) {
     return "Ada Lovelace fue una matematica y escritora britanica del siglo XIX, reconocida por describir un metodo para calcular numeros en la maquina analitica de Charles Babbage, por lo que suele considerarse la primera programadora de la historia.";
@@ -4618,10 +4530,7 @@ function ensureNonEmptyModelResponse(text, question, detail) {
   if (safeText) {
     return safeText;
   }
-  if (NO_TEMPLATE_MODE || FREE_RESPONSE_MODE) {
-    return getSafeUserDetail(detail);
-  }
-  return buildOperationalNoModelResponse(question, detail);
+  return "";
 }
 
 function hasUsableResponseText(text) {
@@ -4642,49 +4551,7 @@ function isClarificationNeededResponse(text) {
 }
 
 function buildBasicFactualFallback(question) {
-  if (NO_TEMPLATE_MODE) {
-    const q = getTextOrEmpty(question);
-    const continuity = buildServiceContinuityResponse(q);
-    if (hasUsableResponseText(continuity)) return continuity;
-    return buildOperationalNoModelResponse(q, "anti-silence-factual-basic");
-  }
-
-  const qRaw = getTextOrEmpty(question);
-  const q = normalizeForIntent(qRaw);
-  const topic = detectPrimaryTopic(qRaw) || "el tema consultado";
-
-  const common = getCommonSenseAnswer(qRaw);
-  if (common) return common;
-
-  if (isBiographyQuery(qRaw)) {
-    return buildBiographyNoVerifiedDataResponse(qRaw);
-  }
-
-  if (/\bhistoria\s+de\s+mexico\b/.test(q) || /\bmexico\b/.test(q) && /\bhistoria\b/.test(q)) {
-    return "Mexico posee una historia que abarca civilizaciones prehispanicas como los mayas y aztecas, la conquista espanola iniciada en 1519, el periodo colonial y la independencia lograda en 1821, seguida por reformas y evolucion hasta el Mexico moderno.";
-  }
-
-  if (isStrictHistoricalQuestion(qRaw)) {
-    if (/\bhistoria\s+de\s+mexico\b/.test(q) || (/\bmexico\b/.test(q) && /\bhistoria\b/.test(q))) {
-      return "La historia de Mexico incluye civilizaciones prehispanicas (olmecas, mayas y mexicas), la conquista espanola iniciada en 1519 con la caida de Tenochtitlan en 1521, el periodo colonial, la independencia iniciada en 1810 y consumada en 1821, y la evolucion del Estado moderno tras la Revolucion iniciada en 1910.";
-    }
-
-    if (/\bfulgencio\s+batista\b/.test(q) && /\bcuando\s+nacio|fecha\s+de\s+nacimiento\b/.test(q)) {
-      return "Fulgencio Batista nacio el 16 de enero de 1901 en Banes, Cuba.";
-    }
-
-    return `Sobre ${topic}: te doy una sintesis historica general y, si quieres, luego la afinamos por periodo, personaje o acontecimiento especifico.`;
-  }
-
-  if (isLikelyLegalScopeQuery(qRaw)) {
-    return `Cuentame el caso concreto y te respondo de forma directa. Si puedes, indica pais, hechos y objetivo.`;
-  }
-
-  if (isFoodQuery(qRaw)) {
-    return `Sobre ${topic}: se puede responder con una receta practica incluyendo ingredientes, pasos de preparacion, tiempo estimado y consejos de ejecucion.`;
-  }
-
-  return buildOperationalNoModelResponse(qRaw, "anti-silence-factual-basic");
+  return "";
 }
 
 function needsAntiSilenceRecovery(question, answerText) {
@@ -7846,14 +7713,6 @@ module.exports = async function handler(req, res) {
       if (NO_TEMPLATE_MODE || FREE_RESPONSE_MODE) {
         const detailText = getTextOrEmpty(payload.detail);
         if (HARD_NO_FALLBACK_MODE) {
-          const structured = getTextOrEmpty(buildStructuredNoFallbackResponse(userQuestion || extractUserQuestion(readJsonBody(req))));
-          if (structured) {
-            return originalJson({
-              ...payload,
-              response: structured,
-              quality_mode: "structured-no-fallback"
-            });
-          }
           const detailNorm = detailText.toLowerCase();
           const isTechnicalDetail = /^(upstream_unavailable|upstream_http_\d+|request timeout|sin detalle)$/.test(detailNorm)
             || /tiempo\s+limite\s+global\s+agotado/.test(detailNorm);
@@ -8887,33 +8746,12 @@ module.exports = async function handler(req, res) {
       if (DISABLE_FORCED_FALLBACKS) {
         const detail = getUpstreamErrorDetail(upstreamResult);
         if (FREE_RESPONSE_MODE && DISABLE_INTERPRETATION_FALLBACKS) {
-          // Segundo intento con prompt ultra-simple antes de continuidad operacional
-          let retryOpenText = "";
-          try {
-            const simpleRetryPayload = buildUpstreamPayload({
-              ...requestBody,
-              model: getDefaultUpstreamModel(),
-              prompt: userQuestion,
-              input: userQuestion,
-              question: userQuestion,
-              webSources: []
-            });
-            const simpleRetryResult = await requestUpstreamWithRetry(simpleRetryPayload, { maxAttempts: 1 });
-            if (simpleRetryResult && simpleRetryResult.ok) {
-              retryOpenText = sanitizeLeakedInstructionText(getTextOrEmpty(extractAssistantText(simpleRetryResult.payload)));
-            }
-          } catch (_retryErr) {}
-
-          const operationalText =
-            retryOpenText
-            || getTextOrEmpty(buildServiceContinuityResponse(userQuestion))
-            || "Puedo ayudarte con eso. Escribe tu pregunta en una sola frase y te respondo de inmediato.";
           res.status(200).json({
-            response: operationalText,
+            response: "",
             sources: [],
             image: null,
             model: upstreamPayload.model || getDefaultUpstreamModel() || RESILIENCE_MODEL_ID,
-            quality_mode: retryOpenText ? "primary-free-simple-retry" : "upstream-operational-continuity",
+            quality_mode: "upstream-error-no-fallback",
             detail
           });
           return;
@@ -8989,11 +8827,8 @@ module.exports = async function handler(req, res) {
       }
 
       if (DISABLE_INTERPRETATION_FALLBACKS && !fastText) {
-        const operationalText = getTextOrEmpty(buildServiceContinuityResponse(userQuestion));
-        if (operationalText) {
-          fastText = operationalText;
-          freeQualityMode = "primary-free-operational-continuity";
-        }
+        fastText = "";
+        freeQualityMode = "primary-free-empty";
       }
 
       if (!DISABLE_INTERPRETATION_FALLBACKS && isBiographyQuery(userQuestion)) {
@@ -9594,21 +9429,8 @@ module.exports = async function handler(req, res) {
     if (DISABLE_FORCED_FALLBACKS) {
       const detail = error && error.message ? error.message : "sin detalle";
       if (HARD_NO_FALLBACK_MODE) {
-        const safeDetail = getSafeUserDetail(detail);
-        const structured = getTextOrEmpty(buildStructuredNoFallbackResponse(userQuestion));
-        if (structured) {
-          res.status(200).json({
-            response: structured,
-            sources: [],
-            image: null,
-            model: upstreamPayload && upstreamPayload.model ? upstreamPayload.model : RESILIENCE_MODEL_ID,
-            quality_mode: "upstream-exception-structured-no-fallback",
-            detail
-          });
-          return;
-        }
         res.status(200).json({
-          response: safeDetail,
+          response: "",
           sources: [],
           image: null,
           model: upstreamPayload && upstreamPayload.model ? upstreamPayload.model : RESILIENCE_MODEL_ID,
